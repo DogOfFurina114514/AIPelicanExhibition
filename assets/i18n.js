@@ -49,32 +49,28 @@ const translations = {
     previewLabel: "作品预览",
     backToList: "← 返回列表",
 
-    dsWebTitle: "DeepSeek 网页对话",
-    dsWebTime: "2分钟",
-    dsWebIntro: "DeepSeek 网页版（chat.deepseek.com）是官方提供的免费 AI 对话入口，支持智能对话问答、写作翻译、解题答疑等通用任务，提供联网搜索与“深度思考”推理模式。用户可上传文件与图片进行识别，历史对话在网页端与 App 端同步。",
+    scoreTitle: "作品评分",
+    scoreAesthetics: "美观性",
+    scoreSimplicity: "简洁度",
+    scoreFunctionality: "功能性",
+    scoreTotal: "总分",
 
+    dsWebTitle: "DeepSeek 网页对话",
+    dsWebIntro: "DeepSeek 网页版（chat.deepseek.com）是官方提供的免费 AI 对话入口，支持智能对话问答、写作翻译、解题答疑等通用任务，提供联网搜索与“深度思考”推理模式。用户可上传文件与图片进行识别，历史对话在网页端与 App 端同步。",
     dsFlashTitle: "DeepSeek-V4.1-Flash",
-    dsFlashTime: "待补充",
     dsFlashIntro: "DeepSeek-V4.1-Flash 是 DeepSeek 全新架构系列中的轻量旗舰模型，以 552B 总参数 MoE 实现越级智能。采用 Causal Encoder-Decoder 非对称架构，输入激活仅 8B、输出激活 16B，并具备原生多模态视觉理解能力。KV Cache 压缩至上一代 HBM 的 1/4，支持 1M 上下文。",
 
     qwenMaxTitle: "Qwen3.8Max",
-    qwenMaxTime: "18分钟",
     qwenMaxIntro: "Qwen3.8-Max 是通义千问系列迄今规模最大、能力最强的旗舰模型，拥有 2.4 万亿参数，支持多达 100 万 Token 的上下文窗口。在 Text Arena 中排名第五，Vision Arena 中排名第二，在编程、办公、科学研究及长周期任务中展现出卓越能力。",
-
     qwenOmniFlashTitle: "Qwen3.8OmniFlash",
-    qwenOmniFlashTime: "9分钟",
     qwenOmniFlashIntro: "Qwen3.8-Omni-Flash 是阿里云推出的原生全模态大模型，支持 1M 长序列及文本、图像、音视频多模态输入与理解。具备视频问答、剪辑、AI 音乐生成等 Agentic 能力，面向真实生产力场景中的 Agent 应用。",
 
     doubaoWebTitle: "豆包网页对话",
-    doubaoWebTime: "＜1分钟",
     doubaoWebIntro: "豆包是字节跳动旗下火山引擎推出的自研大语言模型，原名“云雀”，于2024年5月正式发布。豆包2.0（Doubao-Seed-2.0）针对大规模生产环境进行系统性优化，包含Pro、Lite、Mini三款通用Agent模型和Code模型。豆包2.0 Pro面向深度推理与长链路任务执行，全面对标GPT 5.2与Gemini 3 Pro，在IMO、CMO数学竞赛和ICPC编程竞赛中取得金牌成绩，数学和推理能力达到世界顶尖水平。豆包网页版（www.doubao.com）提供智能对话、多模态理解、实时视频流分析等能力，用户选择“专家”模式即可体验2.0 Pro。",
 
     mimoFlashTitle: "MiMo-V2.6-Flash",
-    mimoFlashTime: "14分钟",
     mimoFlashIntro: "MiMo-V2.6-Flash 是小米于 2026 年 9 月 22 日发布并开源的高效推理模型，采用稀疏 MoE 架构，总参数 309B，每 Token 激活约 15B。原生支持文本、图像、视频、音频全模态输入，支持 1M Token 上下文窗口。在长程软件工程能力评测 DeepSWE v1.1 中，得分从上一代的 48.8 提升至 65.68，提升幅度达 17 分。定价为每百万词元输入 1 元、输出 2 元，并提供 99% 缓存折扣，官方测算成本仅为海外同级模型的 1/20 至 1/60。",
-
     mimoProTitle: "MiMo-V2.6-Pro",
-    mimoProTime: "待补充",
     mimoProIntro: "MiMo-V2.6-Pro 是小米 MiMo-V2.6 系列的全模态旗舰模型，采用稀疏 MoE 架构，总参数突破 1T，每 Token 激活约 42B。原生支持文本、图像、视频、音频全模态输入，支持 1M Token 上下文窗口，面向深度推理与长链路任务执行。在 Artificial Analysis 综合智能指数中登顶全球开源模型第一，在编程、数学、科学推理和多模态理解等基准上达到开源顶尖水平。定价延续 MiMo 系列的高性价比策略，远低于海外同级模型。"
   },
   en: {
@@ -127,32 +123,28 @@ const translations = {
     previewLabel: "Preview",
     backToList: "← Back to list",
 
-    dsWebTitle: "DeepSeek Web Chat",
-    dsWebTime: "2min",
-    dsWebIntro: "DeepSeek Web (chat.deepseek.com) is the official free AI chat portal, supporting intelligent Q&A, writing, translation, and problem-solving. It offers web search and 'Deep Thinking' reasoning mode. Users can upload files and images for recognition, with chat history synced between web and App.",
+    scoreTitle: "Score",
+    scoreAesthetics: "Aesthetics",
+    scoreSimplicity: "Simplicity",
+    scoreFunctionality: "Functionality",
+    scoreTotal: "Total",
 
+    dsWebTitle: "DeepSeek Web Chat",
+    dsWebIntro: "DeepSeek Web (chat.deepseek.com) is the official free AI chat portal, supporting intelligent Q&A, writing, translation, and problem-solving. It offers web search and 'Deep Thinking' reasoning mode. Users can upload files and images for recognition, with chat history synced between web and App.",
     dsFlashTitle: "DeepSeek-V4.1-Flash",
-    dsFlashTime: "To be filled",
     dsFlashIntro: "DeepSeek-V4.1-Flash is the lightweight flagship model in DeepSeek's new architecture family, achieving advanced intelligence with a 552B-parameter MoE. It uses a Causal Encoder-Decoder asymmetric architecture with only 8B active parameters for input and 16B for output, featuring native multimodal visual understanding. KV Cache is compressed to 1/4 of the previous generation's HBM, supporting 1M context.",
 
     qwenMaxTitle: "Qwen3.8Max",
-    qwenMaxTime: "18min",
     qwenMaxIntro: "Qwen3.8-Max is the largest and most capable flagship model in the Qwen series to date, boasting 2.4 trillion parameters and supporting a context window of up to 1 million tokens. It ranks fifth in Text Arena and second in Vision Arena, demonstrating exceptional capabilities in coding, office work, scientific research, and long-horizon tasks.",
-
     qwenOmniFlashTitle: "Qwen3.8OmniFlash",
-    qwenOmniFlashTime: "9min",
     qwenOmniFlashIntro: "Qwen3.8-Omni-Flash is a native omni-modal large model launched by Alibaba Cloud, supporting 1M long sequences and text, image, audio, and video multimodal input and understanding. It features video Q&A, editing, AI music generation, and other agentic capabilities, targeting real-world productivity scenarios.",
 
     doubaoWebTitle: "Doubao Web Chat",
-    doubaoWebTime: "＜1min",
     doubaoWebIntro: "Doubao is the self-developed large language model by Volcano Engine under ByteDance, originally named 'Skylark' and officially released in May 2024. Doubao 2.0 (Doubao-Seed-2.0) is systematically optimized for large-scale production environments, including three general Agent models (Pro, Lite, Mini) and a Code model. Doubao 2.0 Pro targets deep reasoning and long-chain task execution, fully benchmarked against GPT 5.2 and Gemini 3 Pro, achieving gold medals in IMO, CMO, and ICPC programming competitions, with mathematical and reasoning capabilities reaching world-class level. The Doubao web version (www.doubao.com) provides intelligent dialogue, multimodal understanding, and real-time video stream analysis. Users can select 'Expert' mode to experience 2.0 Pro.",
 
     mimoFlashTitle: "MiMo-V2.6-Flash",
-    mimoFlashTime: "14min",
     mimoFlashIntro: "MiMo-V2.6-Flash is an efficient reasoning model released and open-sourced by Xiaomi on September 22, 2026. It uses a sparse MoE architecture with 309B total parameters and approximately 15B active parameters per token. It natively supports text, image, video, and audio input, with a 1M token context window. In the long-horizon software engineering benchmark DeepSWE v1.1, its score improved from 48.8 to 65.68, a gain of 17 points. Pricing is 1 yuan per million input tokens and 2 yuan per million output tokens, with a 99% cache discount. Official estimates place its cost at 1/20 to 1/60 of comparable overseas models.",
-
     mimoProTitle: "MiMo-V2.6-Pro",
-    mimoProTime: "To be filled",
     mimoProIntro: "MiMo-V2.6-Pro is the omni-modal flagship of Xiaomi's MiMo-V2.6 series, using a sparse MoE architecture with over 1T total parameters and approximately 42B active parameters per token. It natively supports text, image, video, and audio input, with a 1M token context window, targeting deep reasoning and long-chain task execution. It ranked first among global open-source models on the Artificial Analysis Intelligence Index, reaching top-tier open-source performance on coding, math, scientific reasoning, and multimodal understanding benchmarks. Pricing continues MiMo's high cost-performance strategy, far below comparable overseas models."
   },
   meme: {
@@ -205,38 +197,34 @@ const translations = {
     previewLabel: "作品预览",
     backToList: "← 返回列表",
 
-    dsWebTitle: "大肥鱼本鱼",
-    dsWebTime: "快得离谱（大肥鱼跑得快）",
-    dsWebIntro: "大肥鱼本鱼，平时在 chat.deepseek.com 蹲着，能聊天、能搜网、能深度思考，还能啃文件。",
+    scoreTitle: "作品评分",
+    scoreAesthetics: "好不好看",
+    scoreSimplicity: "啰不啰嗦",
+    scoreFunctionality: "能不能用",
+    scoreTotal: "综合",
 
+    dsWebTitle: "大肥鱼本鱼",
+    dsWebIntro: "大肥鱼本鱼，平时在 chat.deepseek.com 蹲着，能聊天、能搜网、能深度思考，还能啃文件。",
     dsFlashTitle: "大肥鱼跑得快（快）",
-    dsFlashTime: "快就一个字",
     dsFlashIntro: "大肥鱼 Flash 版本，游得飞快，画鹈鹕也是。",
 
     qwenMaxTitle: "请问3.8最大（最大）",
-    qwenMaxTime: "最大就完事了",
     qwenMaxIntro: "请问，一种神秘的 AI 生物，遇到不懂的就问，问着问着就画出了最大的鹈鹕。",
-
     qwenOmniFlashTitle: "请问3.8全能快（快）",
-    qwenOmniFlashTime: "有点快，但不多",
     qwenOmniFlashIntro: "请问的全能快版本，什么都会一点，什么都快一点。",
 
     doubaoWebTitle: "豆包本包",
-    doubaoWebTime: "你别管成品怎么样，你就说快不快吧",
     doubaoWebIntro: "豆包，字节跳蛋家的，原名云雀，2024年5月出道，2026年2月进化到2.0。数学竞赛拿金牌(bushi)，编程竞赛也拿金牌(bushi)，主打一个真实世界复杂任务执行力(bushi)。平时在 www.doubao.com 蹲着。",
 
     mimoFlashTitle: "米末跑得快（快）",
-    mimoFlashTime: "快在哪",
     mimoFlashIntro: "米末-V2.6-Flash，大米家的，2026年9月22日出的。稀疏 MoE，309B 总参数，每次只激活 15B，省钱。全模态输入，1M 上下文。长程软件工程评测从 48.8 涨到 65.68，涨了 17 分。价格嘛，输入 1 块、输出 2 块，还有 99% 缓存折扣，官方说成本只有海外同级的二十分之一到六十分之一。",
-
     mimoProTitle: "米末2.6 Pro（大）",
-    mimoProTime: "待补充",
     mimoProIntro: "米末-V2.6-Pro，大米家的旗舰，稀疏 MoE，总参数破 1T，每次激活 42B。全模态输入，1M 上下文，主打深度推理和长链路任务。Artificial Analysis 综合智能指数全球开源第一，编程数学科学推理多模态全都顶。价格嘛，延续米末系列的高性价比，远低于海外同级。"
   }
 };
 
 /* ============================================================
- * 多语言
+ *  多语言
  * ============================================================ */
 function replaceDoubao(text, word) {
   if (!word || !text) return text;
@@ -268,6 +256,15 @@ function setLanguage(lang) {
     }
   });
 
+  // 从 workData 读耗时
+  document.querySelectorAll('[data-time-key]').forEach(el => {
+    const key = el.dataset.timeKey;
+    const item = (typeof workData !== 'undefined') ? workData[key] : null;
+    if (item && item.time && item.time[lang]) {
+      el.textContent = item.time[lang];
+    }
+  });
+
   document.querySelectorAll('.lang-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.lang === lang);
   });
@@ -276,17 +273,36 @@ function setLanguage(lang) {
 }
 
 /* ============================================================
- * 莫奈取色（动态色数版）
- *   1. 从图标采样 → 过滤透明/白/黑/灰像素
- *   2. Median Cut 颜色量化 → 最多 4 个主色
- *   3. 合并相近色 → 保留真实差异
- *   4. 莫奈化：柔化饱和度、提亮
- *   5. 按亮度排序 → 生成渐变
- *      1 个色 → 同色相亮度渐变
- *      2+ 个色 → 多色分段渐变
+ *  评分渲染：从 workData 读取三项分数 + 自动算总分
  * ============================================================ */
+function renderScores() {
+  if (typeof workData === 'undefined') return;
+  document.querySelectorAll('[data-score-key]').forEach(box => {
+    const key = box.dataset.scoreKey;
+    const item = workData[key];
+    if (!item || !item.scores) return;
 
-/* ---- 色彩空间转换 ---- */
+    const a = Number(item.scores.aesthetics)    || 0;
+    const s = Number(item.scores.simplicity)    || 0;
+    const f = Number(item.scores.functionality) || 0;
+    const total = ((a + s + f) / 3).toFixed(1);
+
+    const setVal = (name, val) => {
+      const el = box.querySelector(`[data-score="${name}"]`);
+      if (el) el.textContent = Number(val).toFixed(1);
+    };
+    setVal('aesthetics', a);
+    setVal('simplicity', s);
+    setVal('functionality', f);
+
+    const totalEl = box.querySelector('[data-score="total"]');
+    if (totalEl) totalEl.textContent = total;
+  });
+}
+
+/* ============================================================
+ *  莫奈取色（动态色数版）
+ * ============================================================ */
 function rgbToHsl(r, g, b) {
   r /= 255; g /= 255; b /= 255;
   const max = Math.max(r, g, b), min = Math.min(r, g, b);
@@ -307,12 +323,10 @@ function rgbToHsl(r, g, b) {
 
 function hslToRgb(h, s, l) {
   let r, g, b;
-  if (s === 0) {
-    r = g = b = l;
-  } else {
+  if (s === 0) { r = g = b = l; }
+  else {
     const hue2rgb = (p, q, t) => {
-      if (t < 0) t += 1;
-      if (t > 1) t -= 1;
+      if (t < 0) t += 1; if (t > 1) t -= 1;
       if (t < 1 / 6) return p + (q - p) * 6 * t;
       if (t < 1 / 2) return q;
       if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
@@ -327,7 +341,6 @@ function hslToRgb(h, s, l) {
   return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
 }
 
-/* ---- Median Cut 颜色量化 ---- */
 function medianCut(pixels, depth) {
   if (pixels.length === 0) return [];
   if (depth === 0 || pixels.length < 2) {
@@ -336,7 +349,6 @@ function medianCut(pixels, depth) {
     const n = pixels.length;
     return [[Math.round(r / n), Math.round(g / n), Math.round(b / n)]];
   }
-
   let rMin = 255, rMax = 0, gMin = 255, gMax = 0, bMin = 255, bMax = 0;
   for (const p of pixels) {
     if (p.r < rMin) rMin = p.r; if (p.r > rMax) rMax = p.r;
@@ -347,9 +359,7 @@ function medianCut(pixels, depth) {
   let channel = 'r';
   if (gRange >= rRange && gRange >= bRange) channel = 'g';
   else if (bRange >= rRange && bRange >= gRange) channel = 'b';
-
   pixels.sort((a, b) => a[channel] - b[channel]);
-
   const mid = Math.floor(pixels.length / 2);
   return [
     ...medianCut(pixels.slice(0, mid), depth - 1),
@@ -357,15 +367,12 @@ function medianCut(pixels, depth) {
   ];
 }
 
-/* ---- 合并相近色 ---- */
 function dedupeColors(colors, threshold) {
   const result = [];
   for (const c of colors) {
     let merged = false;
     for (const r of result) {
-      const d = Math.sqrt(
-        (c[0] - r[0]) ** 2 + (c[1] - r[1]) ** 2 + (c[2] - r[2]) ** 2
-      );
+      const d = Math.sqrt((c[0] - r[0]) ** 2 + (c[1] - r[1]) ** 2 + (c[2] - r[2]) ** 2);
       if (d < threshold) {
         r[0] = Math.round((r[0] + c[0]) / 2);
         r[1] = Math.round((r[1] + c[1]) / 2);
@@ -379,7 +386,6 @@ function dedupeColors(colors, threshold) {
   return result;
 }
 
-/* ---- 莫奈化：柔化饱和度、提亮 ---- */
 function monetizeColor(rgb) {
   const [r, g, b] = rgb;
   const [h, s, l] = rgbToHsl(r, g, b);
@@ -388,14 +394,8 @@ function monetizeColor(rgb) {
   return hslToRgb(h, newS, newL);
 }
 
-/* ---- 动态生成渐变 ----
- *   1 个色 → 同色相亮度渐变（亮 → 暗）
- *   2+ 个色 → 按亮度排序的多色分段渐变
- */
 function buildGradient(colors) {
   if (!colors || colors.length === 0) return null;
-
-  // 单色：同色相，亮度从亮到暗
   if (colors.length === 1) {
     const [r, g, b] = colors[0];
     const [h, s, l] = rgbToHsl(r, g, b);
@@ -405,23 +405,18 @@ function buildGradient(colors) {
     const c2 = hslToRgb(h, s, l2);
     return `linear-gradient(90deg, rgb(${c1[0]}, ${c1[1]}, ${c1[2]}) 0%, rgb(${c2[0]}, ${c2[1]}, ${c2[2]}) 100%)`;
   }
-
-  // 多色：按亮度从亮到暗排序
   const sorted = [...colors].sort((a, b) => {
     const [, , l1] = rgbToHsl(a[0], a[1], a[2]);
     const [, , l2] = rgbToHsl(b[0], b[1], b[2]);
     return l2 - l1;
   });
-
   const stops = sorted.map((c, i) => {
     const pct = Math.round(i * 100 / (sorted.length - 1));
     return `rgb(${c[0]}, ${c[1]}, ${c[2]}) ${pct}%`;
   });
-
   return `linear-gradient(90deg, ${stops.join(', ')})`;
 }
 
-/* ---- 兜底调色板：从品牌色生成单色亮度渐变 ---- */
 function fallbackPalette(brandColor) {
   const m = brandColor.match(/\d+/g);
   if (!m || m.length < 3) return null;
@@ -429,27 +424,19 @@ function fallbackPalette(brandColor) {
   return buildGradient([monetizeColor(base)]);
 }
 
-/* ---- 从图标提取多色渐变（动态数量） ---- */
 function extractPalette(imgUrl, brandColor, callback) {
   const img = new Image();
   img.onload = () => {
     try {
       const size = 64;
       const canvas = document.createElement('canvas');
-      canvas.width = size;
-      canvas.height = size;
+      canvas.width = size; canvas.height = size;
       const ctx = canvas.getContext('2d', { willReadFrequently: true });
       ctx.drawImage(img, 0, 0, size, size);
-
       let data;
-      try {
-        data = ctx.getImageData(0, 0, size, size).data;
-      } catch (secErr) {
-        callback(brandColor ? fallbackPalette(brandColor) : null);
-        return;
-      }
+      try { data = ctx.getImageData(0, 0, size, size).data; }
+      catch (secErr) { callback(brandColor ? fallbackPalette(brandColor) : null); return; }
 
-      // 收集有效像素（过滤透明、白、黑、灰）
       const pixels = [];
       for (let i = 0; i < data.length; i += 4) {
         const r = data[i], g = data[i + 1], b = data[i + 2], a = data[i + 3];
@@ -458,26 +445,14 @@ function extractPalette(imgUrl, brandColor, callback) {
         if (s < 0.12 || l < 0.12 || l > 0.94) continue;
         pixels.push({ r, g, b });
       }
-
-      // 样本太少（黑白图标），用品牌色兜底
       if (pixels.length < 20) {
         callback(brandColor ? fallbackPalette(brandColor) : null);
         return;
       }
-
-      // Median Cut → 最多 4 个主色
       let palette = medianCut(pixels, 2);
-
-      // 合并相近色（阈值 40，保留差异明显的色）
       palette = dedupeColors(palette, 40);
-
-      // 最多保留 4 个
       if (palette.length > 4) palette = palette.slice(0, 4);
-
-      // 莫奈化每个色
       const monetized = palette.map(monetizeColor);
-
-      // 动态生成渐变
       callback(buildGradient(monetized));
     } catch (e) {
       callback(brandColor ? fallbackPalette(brandColor) : null);
@@ -487,7 +462,6 @@ function extractPalette(imgUrl, brandColor, callback) {
   img.src = imgUrl;
 }
 
-/* ---- 从 .avatar 的 CSS color 读品牌色 ---- */
 function getBrandColor(card) {
   const avatar = card.querySelector('.avatar');
   if (!avatar) return null;
@@ -496,31 +470,24 @@ function getBrandColor(card) {
   return color;
 }
 
-/* ---- 给所有卡片注入 --card-gradient ---- */
 function applyMonetCardColors() {
   document.querySelectorAll('.card').forEach(card => {
     const img = card.querySelector('.avatar-img');
     if (!img || !img.src) return;
-
     const brandColor = getBrandColor(card);
-
     const run = () => {
       extractPalette(img.src, brandColor, gradient => {
         if (!gradient) return;
         card.style.setProperty('--card-gradient', gradient);
       });
     };
-
-    if (img.complete && img.naturalWidth > 0) {
-      run();
-    } else {
-      img.addEventListener('load', run, { once: true });
-    }
+    if (img.complete && img.naturalWidth > 0) { run(); }
+    else { img.addEventListener('load', run, { once: true }); }
   });
 }
 
 /* ============================================================
- * 初始化
+ *  初始化
  * ============================================================ */
 document.addEventListener('DOMContentLoaded', () => {
   let saved = 'zh';
@@ -535,5 +502,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  renderScores();
   applyMonetCardColors();
 });
