@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>豆包展区 - AI 鹈鹕作品展</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="../">
+      <span class="brand-mark"></span>
+      <span data-i18n="brand">AI 鹈鹕作品展</span>
+    </a>
+    <div class="lang-switch" id="langSwitch">
+      <button class="lang-btn" data-lang="zh">中文</button>
+      <button class="lang-btn" data-lang="en">English</button>
+      <button class="lang-btn" data-lang="meme">梗语</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <a class="back-link" href="../" data-i18n="backToList">← 返回列表</a>
+
+  <section class="hero">
+    <h1 class="hero-title" data-i18n="doubaoPageTitle">豆包展区</h1>
+    <p class="hero-sub" data-i18n="doubaoPageSub">豆包是字节跳动旗下火山引擎推出的自研大语言模型...</p>
+  </section>
+
+  <div class="card-grid">
+    <a class="card doubao" href="./DoubaoWeb.html">
+      <div class="card-head">
+        <span class="avatar doubao">
+          <img src="./icon.svg" alt="Doubao" class="avatar-img" 
+               onload="this.style.opacity='1'; this.nextElementSibling.style.display='none';" 
+               onerror="this.style.display='none';">
+          <span class="avatar-fallback">豆</span>
+        </span>
+        <span class="card-arrow">→</span>
+      </div>
+      <h3 class="card-name" data-i18n="doubaoWebName">豆包网页对话</h3>
+      <p class="card-desc" data-i18n="doubaoWebDesc">标准网页对话版本。</p>
+    </a>
+  </div>
+</main>
+
+<footer class="footer" data-i18n="footer">纯静态站点 · 用心做鹈鹕</footer>
+
+<script src="../assets/i18n.js"></script>
+</body>
+</html>
