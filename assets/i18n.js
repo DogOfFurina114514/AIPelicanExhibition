@@ -70,11 +70,11 @@ const translations = {
     doubaoWebIntro: "豆包是字节跳动旗下火山引擎推出的自研大语言模型，原名“云雀”，于2024年5月正式发布。豆包2.0（Doubao-Seed-2.0）针对大规模生产环境进行系统性优化，包含Pro、Lite、Mini三款通用Agent模型和Code模型。豆包2.0 Pro面向深度推理与长链路任务执行，全面对标GPT 5.2与Gemini 3 Pro，在IMO、CMO数学竞赛和ICPC编程竞赛中取得金牌成绩，数学和推理能力达到世界顶尖水平。豆包网页版（www.doubao.com）提供智能对话、多模态理解、实时视频流分析等能力，用户选择“专家”模式即可体验2.0 Pro。",
 
     mimoFlashTitle: "MiMo-V2.6-Flash",
-    mimoFlashTime: "待补充（请在此填写）",
+    mimoFlashTime: "14分钟",
     mimoFlashIntro: "MiMo-V2.6-Flash 是小米于 2026 年 9 月 22 日发布并开源的高效推理模型，采用稀疏 MoE 架构，总参数 309B，每 Token 激活约 15B。原生支持文本、图像、视频、音频全模态输入，支持 1M Token 上下文窗口。在长程软件工程能力评测 DeepSWE v1.1 中，得分从上一代的 48.8 提升至 65.68，提升幅度达 17 分。定价为每百万词元输入 1 元、输出 2 元，并提供 99% 缓存折扣，官方测算成本仅为海外同级模型的 1/20 至 1/60。",
 
     mimoProTitle: "MiMo-V2.6-Pro",
-    mimoProTime: "待补充（请在此填写）",
+    mimoProTime: "待补充",
     mimoProIntro: "MiMo-V2.6-Pro 是小米 MiMo-V2.6 系列的全模态旗舰模型，采用稀疏 MoE 架构，总参数突破 1T，每 Token 激活约 42B。原生支持文本、图像、视频、音频全模态输入，支持 1M Token 上下文窗口，面向深度推理与长链路任务执行。在 Artificial Analysis 综合智能指数中登顶全球开源模型第一，在编程、数学、科学推理和多模态理解等基准上达到开源顶尖水平。定价延续 MiMo 系列的高性价比策略，远低于海外同级模型。"
   },
   en: {
@@ -148,11 +148,11 @@ const translations = {
     doubaoWebIntro: "Doubao is the self-developed large language model by Volcano Engine under ByteDance, originally named 'Skylark' and officially released in May 2024. Doubao 2.0 (Doubao-Seed-2.0) is systematically optimized for large-scale production environments, including three general Agent models (Pro, Lite, Mini) and a Code model. Doubao 2.0 Pro targets deep reasoning and long-chain task execution, fully benchmarked against GPT 5.2 and Gemini 3 Pro, achieving gold medals in IMO, CMO, and ICPC programming competitions, with mathematical and reasoning capabilities reaching world-class level. The Doubao web version (www.doubao.com) provides intelligent dialogue, multimodal understanding, and real-time video stream analysis. Users can select 'Expert' mode to experience 2.0 Pro.",
 
     mimoFlashTitle: "MiMo-V2.6-Flash",
-    mimoFlashTime: "To be filled (edit here)",
+    mimoFlashTime: "14min",
     mimoFlashIntro: "MiMo-V2.6-Flash is an efficient reasoning model released and open-sourced by Xiaomi on September 22, 2026. It uses a sparse MoE architecture with 309B total parameters and approximately 15B active parameters per token. It natively supports text, image, video, and audio input, with a 1M token context window. In the long-horizon software engineering benchmark DeepSWE v1.1, its score improved from 48.8 to 65.68, a gain of 17 points. Pricing is 1 yuan per million input tokens and 2 yuan per million output tokens, with a 99% cache discount. Official estimates place its cost at 1/20 to 1/60 of comparable overseas models.",
 
     mimoProTitle: "MiMo-V2.6-Pro",
-    mimoProTime: "To be filled (edit here)",
+    mimoProTime: "To be filled",
     mimoProIntro: "MiMo-V2.6-Pro is the omni-modal flagship of Xiaomi's MiMo-V2.6 series, using a sparse MoE architecture with over 1T total parameters and approximately 42B active parameters per token. It natively supports text, image, video, and audio input, with a 1M token context window, targeting deep reasoning and long-chain task execution. It ranked first among global open-source models on the Artificial Analysis Intelligence Index, reaching top-tier open-source performance on coding, math, scientific reasoning, and multimodal understanding benchmarks. Pricing continues MiMo's high cost-performance strategy, far below comparable overseas models."
   },
   meme: {
@@ -192,7 +192,7 @@ const translations = {
     doubaoModelName: "豆包",
 
     mimoPageTitle: "米末区域",
-    mimoPageSub: "米末系列，小米家的，2026年9月出的 V2.6，全模态、MoE 架构，登顶全球开源第一，价格还只要别人的二十分之一，主打一个物美价廉。",
+    mimoPageSub: "米末系列，大米家的，2026年9月出的 V2.6，全模态、MoE 架构，登顶全球开源第一，价格还只要别人的二十分之一，主打一个物美价廉。",
     mimoFlashName: "米末跑得快（快）",
     mimoFlashDesc: "全模态高效推理，高频调用首选。",
     mimoProName: "米末2.6 Pro（大）",
@@ -226,20 +226,16 @@ const translations = {
     doubaoWebIntro: "豆包，字节跳蛋家的，原名云雀，2024年5月出道，2026年2月进化到2.0。数学竞赛拿金牌(bushi)，编程竞赛也拿金牌(bushi)，主打一个真实世界复杂任务执行力(bushi)。平时在 www.doubao.com 蹲着。",
 
     mimoFlashTitle: "米末跑得快（快）",
-    mimoFlashTime: "待补充（请在此填写）",
-    mimoFlashIntro: "米末-V2.6-Flash，小米家的，2026年9月22日出的。稀疏 MoE，309B 总参数，每次只激活 15B，省钱。全模态输入，1M 上下文。长程软件工程评测从 48.8 涨到 65.68，涨了 17 分。价格嘛，输入 1 块、输出 2 块，还有 99% 缓存折扣，官方说成本只有海外同级的二十分之一到六十分之一。",
+    mimoFlashTime: "快在哪",
+    mimoFlashIntro: "米末-V2.6-Flash，大米家的，2026年9月22日出的。稀疏 MoE，309B 总参数，每次只激活 15B，省钱。全模态输入，1M 上下文。长程软件工程评测从 48.8 涨到 65.68，涨了 17 分。价格嘛，输入 1 块、输出 2 块，还有 99% 缓存折扣，官方说成本只有海外同级的二十分之一到六十分之一。",
 
     mimoProTitle: "米末2.6 Pro（大）",
-    mimoProTime: "待补充（请在此填写）",
-    mimoProIntro: "米末-V2.6-Pro，小米家的旗舰，稀疏 MoE，总参数破 1T，每次激活 42B。全模态输入，1M 上下文，主打深度推理和长链路任务。Artificial Analysis 综合智能指数全球开源第一，编程数学科学推理多模态全都顶。价格嘛，延续米末系列的高性价比，远低于海外同级。"
+    mimoProTime: "待补充",
+    mimoProIntro: "米末-V2.6-Pro，大米家的旗舰，稀疏 MoE，总参数破 1T，每次激活 42B。全模态输入，1M 上下文，主打深度推理和长链路任务。Artificial Analysis 综合智能指数全球开源第一，编程数学科学推理多模态全都顶。价格嘛，延续米末系列的高性价比，远低于海外同级。"
   }
 };
 
-/**
- * 把文本中所有“豆包”替换为随机梗语词。
- * 特殊规则：如果随机词是“豆脚”，则同时把“本包”改为“本脚”，
- * 让“豆包本包”变成“豆脚本脚”而不是“豆脚本包”。
- */
+/* ===== 多语言 ===== */
 function replaceDoubao(text, word) {
   if (!word || !text) return text;
   let result = text.replace(/豆包/g, word);
@@ -253,7 +249,6 @@ function setLanguage(lang) {
   if (!translations[lang]) lang = 'zh';
   document.documentElement.dataset.lang = lang;
 
-  // 梗语模式下随机选择豆包的叫法
   let doubaoMemeWord = null;
   if (lang === 'meme') {
     const words = ['唐包', 'der包', '豆脚', '豆沙包'];
@@ -264,7 +259,6 @@ function setLanguage(lang) {
     const key = el.dataset.i18n;
     let text = translations[lang][key];
     if (text !== undefined) {
-      // 梗语模式下，把所有“豆包”替换成随机词
       if (doubaoMemeWord) {
         text = replaceDoubao(text, doubaoMemeWord);
       }
@@ -281,10 +275,8 @@ function setLanguage(lang) {
 
 /* ============================================================
  * 莫奈取色：从卡片图标提取主色调，柔化为莫奈风格渐变
- * 应用到卡片的 --card-accent-1 / --card-accent-2
  * ============================================================ */
 
-// RGB -> HSL
 function rgbToHsl(r, g, b) {
   r /= 255; g /= 255; b /= 255;
   const max = Math.max(r, g, b), min = Math.min(r, g, b);
@@ -303,7 +295,6 @@ function rgbToHsl(r, g, b) {
   return [h, s, l];
 }
 
-// HSL -> RGB
 function hslToRgb(h, s, l) {
   let r, g, b;
   if (s === 0) {
@@ -326,46 +317,79 @@ function hslToRgb(h, s, l) {
   return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
 }
 
-// 莫奈化：降饱和、提亮、色相偏移
-function monetize(h, s, l, hueShift) {
-  const newH = (h + hueShift + 1) % 1;
-  const newS = Math.max(0.15, Math.min(0.55, s * 0.55));
-  const newL = Math.max(0.55, Math.min(0.78, l * 0.4 + 0.6));
-  return hslToRgb(newH, newS, newL);
+/**
+ * 莫奈化：保留色相差异，柔化饱和度和亮度。
+ */
+function makeMonetFromRGB(rgbString) {
+  const m = rgbString.match(/\d+/g);
+  if (!m || m.length < 3) return null;
+  const r = +m[0], g = +m[1], b = +m[2];
+  const [h, s, l] = rgbToHsl(r, g, b);
+
+  const newS = Math.min(0.7, Math.max(0.35, s * 0.8));
+  const newL = Math.min(0.72, Math.max(0.5, l * 0.35 + 0.5));
+
+  const [r1, g1, b1] = hslToRgb(h, newS, newL);
+  const h2 = (h + 0.11) % 1;
+  const [r2, g2, b2] = hslToRgb(h2, newS, newL);
+
+  return {
+    c1: `rgb(${r1}, ${g1}, ${b1})`,
+    c2: `rgb(${r2}, ${g2}, ${b2})`
+  };
 }
 
-// 对一张图片取主色并生成两个渐变端点
-function extractMonetPalette(imgUrl, callback) {
+/**
+ * 从卡片 .avatar 的 CSS color 读取品牌色。
+ */
+function getBrandColor(card) {
+  const avatar = card.querySelector('.avatar');
+  if (!avatar) return null;
+  const color = getComputedStyle(avatar).color;
+  if (!color || color === 'rgb(0, 0, 0)' || color === 'rgba(0, 0, 0, 0)') return null;
+  return color;
+}
+
+/**
+ * 对图片取色，失败时用品牌色兜底。
+ */
+function extractMonetPalette(imgUrl, brandColor, callback) {
   const img = new Image();
-  img.crossOrigin = 'anonymous';
+  // 不设置 crossOrigin，避免本地 file:// 下加载失败
   img.onload = () => {
     try {
-      const size = 32;
+      const size = 64;
       const canvas = document.createElement('canvas');
       canvas.width = size;
       canvas.height = size;
       const ctx = canvas.getContext('2d', { willReadFrequently: true });
       ctx.drawImage(img, 0, 0, size, size);
-      const data = ctx.getImageData(0, 0, size, size).data;
+
+      let data;
+      try {
+        data = ctx.getImageData(0, 0, size, size).data;
+      } catch (secErr) {
+        callback(brandColor ? makeMonetFromRGB(brandColor) : null);
+        return;
+      }
 
       const samples = [];
       for (let i = 0; i < data.length; i += 4) {
         const r = data[i], g = data[i + 1], b = data[i + 2], a = data[i + 3];
         if (a < 100) continue;
         const [h, s, l] = rgbToHsl(r, g, b);
-        // 过滤灰、白、黑
-        if (s < 0.18 || l < 0.08 || l > 0.95) continue;
+        if (s < 0.15 || l < 0.15 || l > 0.92) continue;
         samples.push({ r, g, b, s });
       }
 
-      if (samples.length === 0) {
-        callback(null);
+      // 样本太少（比如黑白图标），用品牌色兜底
+      if (samples.length < 10) {
+        callback(brandColor ? makeMonetFromRGB(brandColor) : null);
         return;
       }
 
-      // 按饱和度降序，取前一半（最具代表性的鲜艳色）
       samples.sort((a, b) => b.s - a.s);
-      const top = samples.slice(0, Math.max(1, Math.floor(samples.length / 2)));
+      const top = samples.slice(0, Math.max(1, Math.floor(samples.length * 0.4)));
 
       let rSum = 0, gSum = 0, bSum = 0;
       top.forEach(c => { rSum += c.r; gSum += c.g; bSum += c.b; });
@@ -373,34 +397,40 @@ function extractMonetPalette(imgUrl, callback) {
       const gAvg = Math.round(gSum / top.length);
       const bAvg = Math.round(bSum / top.length);
 
-      const [h, s, l] = rgbToHsl(rAvg, gAvg, bAvg);
-      // 两个莫奈色端点：主色相不变，辅色相偏移 40°
-      const [r1, g1, b1] = monetize(h, s, l, 0);
-      const [r2, g2, b2] = monetize(h, s, l, 0.11); // 约 40°
-
-      callback({
-        c1: `rgb(${r1}, ${g1}, ${b1})`,
-        c2: `rgb(${r2}, ${g2}, ${b2})`
-      });
+      callback(makeMonetFromRGB(`rgb(${rAvg}, ${gAvg}, ${bAvg})`));
     } catch (e) {
-      callback(null);
+      callback(brandColor ? makeMonetFromRGB(brandColor) : null);
     }
   };
-  img.onerror = () => callback(null);
+  img.onerror = () => {
+    callback(brandColor ? makeMonetFromRGB(brandColor) : null);
+  };
   img.src = imgUrl;
 }
 
-// 给所有卡片应用莫奈渐变
+/**
+ * 给所有卡片应用莫奈渐变。
+ */
 function applyMonetCardColors() {
   document.querySelectorAll('.card').forEach(card => {
     const img = card.querySelector('.avatar-img');
     if (!img || !img.src) return;
-    // 如果图标还没加载成功（被隐藏了），就用 img.src 重试
-    extractMonetPalette(img.src, palette => {
-      if (!palette) return;
-      card.style.setProperty('--card-accent-1', palette.c1);
-      card.style.setProperty('--card-accent-2', palette.c2);
-    });
+
+    const brandColor = getBrandColor(card);
+
+    const run = () => {
+      extractMonetPalette(img.src, brandColor, palette => {
+        if (!palette) return;
+        card.style.setProperty('--card-accent-1', palette.c1);
+        card.style.setProperty('--card-accent-2', palette.c2);
+      });
+    };
+
+    if (img.complete && img.naturalWidth > 0) {
+      run();
+    } else {
+      img.addEventListener('load', run, { once: true });
+    }
   });
 }
 
@@ -418,6 +448,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 应用莫奈取色
   applyMonetCardColors();
 });
