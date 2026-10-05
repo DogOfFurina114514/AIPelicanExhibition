@@ -33,19 +33,19 @@ const translations = {
     backToList: "← 返回列表",
 
     dsWebTitle: "DeepSeek 网页对话",
-    dsWebTime: "待补充（请在此填写）",
+    dsWebTime: "2min",
     dsWebIntro: "DeepSeek 网页版（chat.deepseek.com）是官方提供的免费 AI 对话入口，支持智能对话问答、写作翻译、解题答疑等通用任务，提供联网搜索与“深度思考”推理模式。用户可上传文件与图片进行识别，历史对话在网页端与 App 端同步。",
 
     dsFlashTitle: "DeepSeek-V4.1-Flash",
-    dsFlashTime: "待补充（请在此填写）",
+    dsFlashTime: "待补充",
     dsFlashIntro: "DeepSeek-V4.1-Flash 是 DeepSeek 全新架构系列中的轻量旗舰模型，以 552B 总参数 MoE 实现越级智能。采用 Causal Encoder-Decoder 非对称架构，输入激活仅 8B、输出激活 16B，并具备原生多模态视觉理解能力。KV Cache 压缩至上一代 HBM 的 1/4，支持 1M 上下文。",
 
     qwenMaxTitle: "Qwen3.8Max",
-    qwenMaxTime: "待补充（请在此填写）",
+    qwenMaxTime: "18min",
     qwenMaxIntro: "Qwen3.8-Max 是通义千问系列迄今规模最大、能力最强的旗舰模型，拥有 2.4 万亿参数，支持多达 100 万 Token 的上下文窗口。在 Text Arena 中排名第五，Vision Arena 中排名第二，在编程、办公、科学研究及长周期任务中展现出卓越能力。",
 
     qwenOmniFlashTitle: "Qwen3.8OmniFlash",
-    qwenOmniFlashTime: "待补充（请在此填写）",
+    qwenOmniFlashTime: "9min",
     qwenOmniFlashIntro: "Qwen3.8-Omni-Flash 是阿里云推出的原生全模态大模型，支持 1M 长序列及文本、图像、音视频多模态输入与理解。具备视频问答、剪辑、AI 音乐生成等 Agentic 能力，面向真实生产力场景中的 Agent 应用。"
   },
   en: {
