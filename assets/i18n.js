@@ -235,7 +235,9 @@ const translations = {
   }
 };
 
-/* ===== 多语言 ===== */
+/* ============================================================
+ * 多语言
+ * ============================================================ */
 function replaceDoubao(text, word) {
   if (!word || !text) return text;
   let result = text.replace(/豆包/g, word);
@@ -274,9 +276,17 @@ function setLanguage(lang) {
 }
 
 /* ============================================================
- * 莫奈取色：从卡片图标提取主色调，柔化为莫奈风格渐变
+ * 莫奈取色（动态色数版）
+ *   1. 从图标采样 → 过滤透明/白/黑/灰像素
+ *   2. Median Cut 颜色量化 → 最多 4 个主色
+ *   3. 合并相近色 → 保留真实差异
+ *   4. 莫奈化：柔化饱和度、提亮
+ *   5. 按亮度排序 → 生成渐变
+ *      1 个色 → 同色相亮度渐变
+ *      2+ 个色 → 多色分段渐变
  * ============================================================ */
 
+/* ---- 色彩空间转换 ---- */
 function rgbToHsl(r, g, b) {
   r /= 255; g /= 255; b /= 255;
   const max = Math.max(r, g, b), min = Math.min(r, g, b);
@@ -317,45 +327,111 @@ function hslToRgb(h, s, l) {
   return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
 }
 
-/**
- * 莫奈化：保留色相差异，柔化饱和度和亮度。
- */
-function makeMonetFromRGB(rgbString) {
-  const m = rgbString.match(/\d+/g);
-  if (!m || m.length < 3) return null;
-  const r = +m[0], g = +m[1], b = +m[2];
+/* ---- Median Cut 颜色量化 ---- */
+function medianCut(pixels, depth) {
+  if (pixels.length === 0) return [];
+  if (depth === 0 || pixels.length < 2) {
+    let r = 0, g = 0, b = 0;
+    for (const p of pixels) { r += p.r; g += p.g; b += p.b; }
+    const n = pixels.length;
+    return [[Math.round(r / n), Math.round(g / n), Math.round(b / n)]];
+  }
+
+  let rMin = 255, rMax = 0, gMin = 255, gMax = 0, bMin = 255, bMax = 0;
+  for (const p of pixels) {
+    if (p.r < rMin) rMin = p.r; if (p.r > rMax) rMax = p.r;
+    if (p.g < gMin) gMin = p.g; if (p.g > gMax) gMax = p.g;
+    if (p.b < bMin) bMin = p.b; if (p.b > bMax) bMax = p.b;
+  }
+  const rRange = rMax - rMin, gRange = gMax - gMin, bRange = bMax - bMin;
+  let channel = 'r';
+  if (gRange >= rRange && gRange >= bRange) channel = 'g';
+  else if (bRange >= rRange && bRange >= gRange) channel = 'b';
+
+  pixels.sort((a, b) => a[channel] - b[channel]);
+
+  const mid = Math.floor(pixels.length / 2);
+  return [
+    ...medianCut(pixels.slice(0, mid), depth - 1),
+    ...medianCut(pixels.slice(mid), depth - 1)
+  ];
+}
+
+/* ---- 合并相近色 ---- */
+function dedupeColors(colors, threshold) {
+  const result = [];
+  for (const c of colors) {
+    let merged = false;
+    for (const r of result) {
+      const d = Math.sqrt(
+        (c[0] - r[0]) ** 2 + (c[1] - r[1]) ** 2 + (c[2] - r[2]) ** 2
+      );
+      if (d < threshold) {
+        r[0] = Math.round((r[0] + c[0]) / 2);
+        r[1] = Math.round((r[1] + c[1]) / 2);
+        r[2] = Math.round((r[2] + c[2]) / 2);
+        merged = true;
+        break;
+      }
+    }
+    if (!merged) result.push([...c]);
+  }
+  return result;
+}
+
+/* ---- 莫奈化：柔化饱和度、提亮 ---- */
+function monetizeColor(rgb) {
+  const [r, g, b] = rgb;
   const [h, s, l] = rgbToHsl(r, g, b);
-
-  const newS = Math.min(0.7, Math.max(0.35, s * 0.8));
-  const newL = Math.min(0.72, Math.max(0.5, l * 0.35 + 0.5));
-
-  const [r1, g1, b1] = hslToRgb(h, newS, newL);
-  const h2 = (h + 0.11) % 1;
-  const [r2, g2, b2] = hslToRgb(h2, newS, newL);
-
-  return {
-    c1: `rgb(${r1}, ${g1}, ${b1})`,
-    c2: `rgb(${r2}, ${g2}, ${b2})`
-  };
+  const newS = Math.min(0.65, Math.max(0.25, s * 0.7));
+  const newL = Math.min(0.78, Math.max(0.45, l * 0.5 + 0.4));
+  return hslToRgb(h, newS, newL);
 }
 
-/**
- * 从卡片 .avatar 的 CSS color 读取品牌色。
+/* ---- 动态生成渐变 ----
+ *   1 个色 → 同色相亮度渐变（亮 → 暗）
+ *   2+ 个色 → 按亮度排序的多色分段渐变
  */
-function getBrandColor(card) {
-  const avatar = card.querySelector('.avatar');
-  if (!avatar) return null;
-  const color = getComputedStyle(avatar).color;
-  if (!color || color === 'rgb(0, 0, 0)' || color === 'rgba(0, 0, 0, 0)') return null;
-  return color;
+function buildGradient(colors) {
+  if (!colors || colors.length === 0) return null;
+
+  // 单色：同色相，亮度从亮到暗
+  if (colors.length === 1) {
+    const [r, g, b] = colors[0];
+    const [h, s, l] = rgbToHsl(r, g, b);
+    const l1 = Math.min(0.85, l + 0.18);
+    const l2 = Math.max(0.35, l - 0.12);
+    const c1 = hslToRgb(h, s, l1);
+    const c2 = hslToRgb(h, s, l2);
+    return `linear-gradient(90deg, rgb(${c1[0]}, ${c1[1]}, ${c1[2]}) 0%, rgb(${c2[0]}, ${c2[1]}, ${c2[2]}) 100%)`;
+  }
+
+  // 多色：按亮度从亮到暗排序
+  const sorted = [...colors].sort((a, b) => {
+    const [, , l1] = rgbToHsl(a[0], a[1], a[2]);
+    const [, , l2] = rgbToHsl(b[0], b[1], b[2]);
+    return l2 - l1;
+  });
+
+  const stops = sorted.map((c, i) => {
+    const pct = Math.round(i * 100 / (sorted.length - 1));
+    return `rgb(${c[0]}, ${c[1]}, ${c[2]}) ${pct}%`;
+  });
+
+  return `linear-gradient(90deg, ${stops.join(', ')})`;
 }
 
-/**
- * 对图片取色，失败时用品牌色兜底。
- */
-function extractMonetPalette(imgUrl, brandColor, callback) {
+/* ---- 兜底调色板：从品牌色生成单色亮度渐变 ---- */
+function fallbackPalette(brandColor) {
+  const m = brandColor.match(/\d+/g);
+  if (!m || m.length < 3) return null;
+  const base = [ +m[0], +m[1], +m[2] ];
+  return buildGradient([monetizeColor(base)]);
+}
+
+/* ---- 从图标提取多色渐变（动态数量） ---- */
+function extractPalette(imgUrl, brandColor, callback) {
   const img = new Image();
-  // 不设置 crossOrigin，避免本地 file:// 下加载失败
   img.onload = () => {
     try {
       const size = 64;
@@ -369,48 +445,58 @@ function extractMonetPalette(imgUrl, brandColor, callback) {
       try {
         data = ctx.getImageData(0, 0, size, size).data;
       } catch (secErr) {
-        callback(brandColor ? makeMonetFromRGB(brandColor) : null);
+        callback(brandColor ? fallbackPalette(brandColor) : null);
         return;
       }
 
-      const samples = [];
+      // 收集有效像素（过滤透明、白、黑、灰）
+      const pixels = [];
       for (let i = 0; i < data.length; i += 4) {
         const r = data[i], g = data[i + 1], b = data[i + 2], a = data[i + 3];
-        if (a < 100) continue;
-        const [h, s, l] = rgbToHsl(r, g, b);
-        if (s < 0.15 || l < 0.15 || l > 0.92) continue;
-        samples.push({ r, g, b, s });
+        if (a < 128) continue;
+        const [, s, l] = rgbToHsl(r, g, b);
+        if (s < 0.12 || l < 0.12 || l > 0.94) continue;
+        pixels.push({ r, g, b });
       }
 
-      // 样本太少（比如黑白图标），用品牌色兜底
-      if (samples.length < 10) {
-        callback(brandColor ? makeMonetFromRGB(brandColor) : null);
+      // 样本太少（黑白图标），用品牌色兜底
+      if (pixels.length < 20) {
+        callback(brandColor ? fallbackPalette(brandColor) : null);
         return;
       }
 
-      samples.sort((a, b) => b.s - a.s);
-      const top = samples.slice(0, Math.max(1, Math.floor(samples.length * 0.4)));
+      // Median Cut → 最多 4 个主色
+      let palette = medianCut(pixels, 2);
 
-      let rSum = 0, gSum = 0, bSum = 0;
-      top.forEach(c => { rSum += c.r; gSum += c.g; bSum += c.b; });
-      const rAvg = Math.round(rSum / top.length);
-      const gAvg = Math.round(gSum / top.length);
-      const bAvg = Math.round(bSum / top.length);
+      // 合并相近色（阈值 40，保留差异明显的色）
+      palette = dedupeColors(palette, 40);
 
-      callback(makeMonetFromRGB(`rgb(${rAvg}, ${gAvg}, ${bAvg})`));
+      // 最多保留 4 个
+      if (palette.length > 4) palette = palette.slice(0, 4);
+
+      // 莫奈化每个色
+      const monetized = palette.map(monetizeColor);
+
+      // 动态生成渐变
+      callback(buildGradient(monetized));
     } catch (e) {
-      callback(brandColor ? makeMonetFromRGB(brandColor) : null);
+      callback(brandColor ? fallbackPalette(brandColor) : null);
     }
   };
-  img.onerror = () => {
-    callback(brandColor ? makeMonetFromRGB(brandColor) : null);
-  };
+  img.onerror = () => callback(brandColor ? fallbackPalette(brandColor) : null);
   img.src = imgUrl;
 }
 
-/**
- * 给所有卡片应用莫奈渐变。
- */
+/* ---- 从 .avatar 的 CSS color 读品牌色 ---- */
+function getBrandColor(card) {
+  const avatar = card.querySelector('.avatar');
+  if (!avatar) return null;
+  const color = getComputedStyle(avatar).color;
+  if (!color || color === 'rgb(0, 0, 0)' || color === 'rgba(0, 0, 0, 0)') return null;
+  return color;
+}
+
+/* ---- 给所有卡片注入 --card-gradient ---- */
 function applyMonetCardColors() {
   document.querySelectorAll('.card').forEach(card => {
     const img = card.querySelector('.avatar-img');
@@ -419,10 +505,9 @@ function applyMonetCardColors() {
     const brandColor = getBrandColor(card);
 
     const run = () => {
-      extractMonetPalette(img.src, brandColor, palette => {
-        if (!palette) return;
-        card.style.setProperty('--card-accent-1', palette.c1);
-        card.style.setProperty('--card-accent-2', palette.c2);
+      extractPalette(img.src, brandColor, gradient => {
+        if (!gradient) return;
+        card.style.setProperty('--card-gradient', gradient);
       });
     };
 
@@ -434,7 +519,9 @@ function applyMonetCardColors() {
   });
 }
 
-/* ===== 初始化 ===== */
+/* ============================================================
+ * 初始化
+ * ============================================================ */
 document.addEventListener('DOMContentLoaded', () => {
   let saved = 'zh';
   try { saved = localStorage.getItem('preferred-lang') || 'zh'; } catch (e) {}
