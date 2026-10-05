@@ -184,6 +184,20 @@ const translations = {
   }
 };
 
+/**
+ * 把文本中所有“豆包”替换为随机梗语词。
+ * 特殊规则：如果随机词是“豆脚”，则同时把“本包”改为“本脚”，
+ * 让“豆包本包”变成“豆脚本脚”而不是“豆脚本包”。
+ */
+function replaceDoubao(text, word) {
+  if (!word || !text) return text;
+  let result = text.replace(/豆包/g, word);
+  if (word === '豆脚') {
+    result = result.replace(/本包/g, '本脚');
+  }
+  return result;
+}
+
 function setLanguage(lang) {
   if (!translations[lang]) lang = 'zh';
   document.documentElement.dataset.lang = lang;
@@ -200,8 +214,8 @@ function setLanguage(lang) {
     let text = translations[lang][key];
     if (text !== undefined) {
       // 梗语模式下，把所有“豆包”替换成随机词
-      if (doubaoMemeWord && text.includes('豆包')) {
-        text = text.replace(/豆包/g, doubaoMemeWord);
+      if (doubaoMemeWord) {
+        text = replaceDoubao(text, doubaoMemeWord);
       }
       el.textContent = text;
     }
