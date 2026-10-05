@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MiMo-V2.6-Pro - 详情</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="../">
+      <span class="brand-mark"></span>
+      <span data-i18n="brand">AI 鹈鹕作品展</span>
+    </a>
+    <div class="lang-switch" id="langSwitch">
+      <button class="lang-btn" data-lang="zh">中文</button>
+      <button class="lang-btn" data-lang="en">English</button>
+      <button class="lang-btn" data-lang="meme">梗语</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <a class="back-link" href="./" data-i18n="backToList">← 返回列表</a>
+
+  <div class="detail-header">
+    <div class="detail-title-row">
+      <span class="avatar mimo lg">
+        <img src="./icon.svg" alt="MiMo" class="avatar-img" 
+             onload="this.style.opacity='1'; this.nextElementSibling.style.display='none';" 
+             onerror="this.style.display='none';">
+        <span class="avatar-fallback">M</span>
+      </span>
+      <h1 class="detail-title" data-i18n="mimoProTitle">MiMo-V2.6-Pro</h1>
+    </div>
+    <div class="detail-meta">
+      <div class="meta-item">
+        <span class="meta-label" data-i18n="modelLabel">模型：</span>
+        <span>MiMo-V2.6-Pro</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label" data-i18n="timeLabel">耗时：</span>
+        <span data-i18n="mimoProTime">待补充（请在此填写）</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label" data-i18n="versionLabel">版本：</span>
+        <span>Pro</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="intro-box">
+    <h3 data-i18n="introTitle">模型官方介绍</h3>
+    <p data-i18n="mimoProIntro">MiMo-V2.6-Pro 是小米 MiMo-V2.6 系列的全模态旗舰模型...</p>
+  </div>
+
+  <div class="preview-container">
+    <div class="preview-header">
+      <span class="preview-dot red"></span>
+      <span class="preview-dot yellow"></span>
+      <span class="preview-dot green"></span>
+      <span style="margin-left: 0.5rem;" data-i18n="previewLabel">作品预览</span>
+    </div>
+    <iframe src="./works/MiMoV26Pro.html" title="MiMo-V2.6-Pro 作品" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+  </div>
+</main>
+
+<footer class="footer" data-i18n="footer">纯静态站点 · 用心做鹈鹕</footer>
+
+<script src="../assets/i18n.js"></script>
+</body>
+</html>
