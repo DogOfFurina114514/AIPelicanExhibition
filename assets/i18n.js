@@ -33,7 +33,7 @@ const translations = {
     backToList: "← 返回列表",
 
     dsWebTitle: "DeepSeek 网页对话",
-    dsWebTime: "2min",
+    dsWebTime: "2分钟",
     dsWebIntro: "DeepSeek 网页版（chat.deepseek.com）是官方提供的免费 AI 对话入口，支持智能对话问答、写作翻译、解题答疑等通用任务，提供联网搜索与“深度思考”推理模式。用户可上传文件与图片进行识别，历史对话在网页端与 App 端同步。",
 
     dsFlashTitle: "DeepSeek-V4.1-Flash",
@@ -41,11 +41,11 @@ const translations = {
     dsFlashIntro: "DeepSeek-V4.1-Flash 是 DeepSeek 全新架构系列中的轻量旗舰模型，以 552B 总参数 MoE 实现越级智能。采用 Causal Encoder-Decoder 非对称架构，输入激活仅 8B、输出激活 16B，并具备原生多模态视觉理解能力。KV Cache 压缩至上一代 HBM 的 1/4，支持 1M 上下文。",
 
     qwenMaxTitle: "Qwen3.8Max",
-    qwenMaxTime: "18min",
+    qwenMaxTime: "18分钟",
     qwenMaxIntro: "Qwen3.8-Max 是通义千问系列迄今规模最大、能力最强的旗舰模型，拥有 2.4 万亿参数，支持多达 100 万 Token 的上下文窗口。在 Text Arena 中排名第五，Vision Arena 中排名第二，在编程、办公、科学研究及长周期任务中展现出卓越能力。",
 
     qwenOmniFlashTitle: "Qwen3.8OmniFlash",
-    qwenOmniFlashTime: "9min",
+    qwenOmniFlashTime: "9分钟",
     qwenOmniFlashIntro: "Qwen3.8-Omni-Flash 是阿里云推出的原生全模态大模型，支持 1M 长序列及文本、图像、音视频多模态输入与理解。具备视频问答、剪辑、AI 音乐生成等 Agentic 能力，面向真实生产力场景中的 Agent 应用。"
   },
   en: {
@@ -82,19 +82,19 @@ const translations = {
     backToList: "← Back to list",
 
     dsWebTitle: "DeepSeek Web Chat",
-    dsWebTime: "To be filled (edit here)",
+    dsWebTime: "2min",
     dsWebIntro: "DeepSeek Web (chat.deepseek.com) is the official free AI chat portal, supporting intelligent Q&A, writing, translation, and problem-solving. It offers web search and 'Deep Thinking' reasoning mode. Users can upload files and images for recognition, with chat history synced between web and App.",
 
     dsFlashTitle: "DeepSeek-V4.1-Flash",
-    dsFlashTime: "To be filled (edit here)",
+    dsFlashTime: "To be filled",
     dsFlashIntro: "DeepSeek-V4.1-Flash is the lightweight flagship model in DeepSeek's new architecture family, achieving advanced intelligence with a 552B-parameter MoE. It uses a Causal Encoder-Decoder asymmetric architecture with only 8B active parameters for input and 16B for output, featuring native multimodal visual understanding. KV Cache is compressed to 1/4 of the previous generation's HBM, supporting 1M context.",
 
     qwenMaxTitle: "Qwen3.8Max",
-    qwenMaxTime: "To be filled (edit here)",
+    qwenMaxTime: "18min",
     qwenMaxIntro: "Qwen3.8-Max is the largest and most capable flagship model in the Qwen series to date, boasting 2.4 trillion parameters and supporting a context window of up to 1 million tokens. It ranks fifth in Text Arena and second in Vision Arena, demonstrating exceptional capabilities in coding, office work, scientific research, and long-horizon tasks.",
 
     qwenOmniFlashTitle: "Qwen3.8OmniFlash",
-    qwenOmniFlashTime: "To be filled (edit here)",
+    qwenOmniFlashTime: "9min",
     qwenOmniFlashIntro: "Qwen3.8-Omni-Flash is a native omni-modal large model launched by Alibaba Cloud, supporting 1M long sequences and text, image, audio, and video multimodal input and understanding. It features video Q&A, editing, AI music generation, and other agentic capabilities, targeting real-world productivity scenarios."
   },
   meme: {
@@ -131,7 +131,7 @@ const translations = {
     backToList: "← 返回列表",
 
     dsWebTitle: "大肥鱼本鱼",
-    dsWebTime: "快得离谱（大肥鱼跑得快）",
+    dsWebTime: "快得离谱",
     dsWebIntro: "大肥鱼本鱼，平时在 chat.deepseek.com 蹲着，能聊天、能搜网、能深度思考，还能啃文件。",
 
     dsFlashTitle: "大肥鱼跑得快（快）",
@@ -143,7 +143,7 @@ const translations = {
     qwenMaxIntro: "请问，一种神秘的 AI 生物，遇到不懂的就问，问着问着就画出了最大的鹈鹕。",
 
     qwenOmniFlashTitle: "请问3.8全能快（快）",
-    qwenOmniFlashTime: "快，但全能",
+    qwenOmniFlashTime: "有点快，但不多",
     qwenOmniFlashIntro: "请问的全能快版本，什么都会一点，什么都快一点。"
   }
 };
