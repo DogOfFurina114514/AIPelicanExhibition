@@ -126,7 +126,7 @@ const translations = {
     modelLabel: "模型：",
     timeLabel: "耗时：",
     versionLabel: "版本：",
-    introTitle: "大肥鱼介绍", // 修改这里：从"大肥鱼官方介绍"改为"大肥鱼介绍"
+    introTitle: "大肥鱼写的介绍",
     previewLabel: "作品预览",
     backToList: "← 返回列表",
 
