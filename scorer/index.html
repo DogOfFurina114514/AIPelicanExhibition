@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI 鹈鹕作品评分器</title>
+<meta name="description" content="自动分析 HTML 作品的美观性、简洁度、功能性。">
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+  /* ---- 该页专属样式 ---- */
+  .dim-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
+  }
+  .dim-card {
+    padding: 1.75rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+  }
+  .dim-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+  }
+  .dim-icon {
+    font-size: 2rem;
+    line-height: 1;
+    margin-bottom: 0.75rem;
+  }
+  .dim-card h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: var(--text);
+  }
+  .dim-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .dim-card li {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    padding: 0.35rem 0;
+    padding-left: 1.25rem;
+    position: relative;
+    line-height: 1.5;
+  }
+  .dim-card li::before {
+    content: '·';
+    position: absolute;
+    left: 0.35rem;
+    color: var(--primary);
+    font-weight: 800;
+    font-size: 1.25rem;
+    line-height: 1;
+    top: 0.45rem;
+  }
+
+  /* ---- 下载卡片 ---- */
+  .download-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
+  }
+  .download-btn {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    text-decoration: none;
+    color: var(--text);
+    transition: var(--transition);
+    box-shadow: var(--shadow);
+  }
+  .download-btn:hover {
+    transform: translateY(-2px);
+    border-color: var(--primary);
+    box-shadow: var(--shadow-hover);
+  }
+  .download-btn .dl-icon {
+    font-size: 1.75rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .download-btn strong {
+    display: block;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.15rem;
+  }
+  .download-btn small {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+  }
+
+  /* ---- 使用步骤 ---- */
+  .usage-list {
+    list-style: none;
+    counter-reset: step;
+    padding: 0;
+    margin-bottom: 2rem;
+  }
+  .usage-list li {
+    counter-increment: step;
+    position: relative;
+    padding: 1rem 1rem 1rem 3.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .usage-list li::before {
+    content: counter(step);
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--qwen-color));
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ---- 代码块 ---- */
+  .code-block {
+    background: #1e293b;
+    color: #e2e8f0;
+    padding: 1rem 1.25rem;
+    border-radius: 12px;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 0.85rem;
+    line-height: 1.7;
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+    border: 1px solid #334155;
+  }
+  .code-block code {
+    color: inherit;
+    font-family: inherit;
+  }
+
+  /* ---- 章节 ---- */
+  .section-block {
+    margin-bottom: 3rem;
+  }
+  .section-block > h2 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+  .section-block > p {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    line-height: 1.75;
+    margin-bottom: 1.5rem;
+    max-width: 720px;
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="../">
+      <span class="brand-mark"></span>
+      <span data-i18n="brand">AI 鹈鹕作品展</span>
+    </a>
+    <div class="lang-switch" id="langSwitch">
+      <button class="lang-btn" data-lang="zh">中文</button>
+      <button class="lang-btn" data-lang="en">English</button>
+      <button class="lang-btn" data-lang="meme">梗语</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <a class="back-link" href="../" data-i18n="backHome">← 返回首页</a>
+
+  <section class="hero">
+    <span class="pill" data-i18n="scorerPill">开源工具 · PySide6 · Python</span>
+    <h1 class="hero-title" data-i18n="scorerTitle">AI 鹈鹕作品评分器</h1>
+    <p class="hero-sub" data-i18n="scorerSub">一个可以拖入 HTML 文件、自动分析美观性/简洁度/功能性的桌面小工具。</p>
+  </section>
+
+  <!-- 这是什么 -->
+  <div class="section-block">
+    <h2 data-i18n="whatTitle">这是什么？</h2>
+    <p data-i18n="whatBody">
+      这是本站用于给每个 AI 生成的网页作品打分的工具。它不会「看」作品长什么样，而是通过分析 HTML 源码里的结构、样式、脚本，按照三个维度给出一组客观分数。所有作品页面上展示的评分，都是由这个程序生成的。
+    </p>
+  </div>
+
+  <!-- 运作方式 -->
+  <div class="section-block">
+    <h2 data-i18n="howTitle">它是怎么打分的</h2>
+    <p data-i18n="howBody">
+      程序读取 HTML 源码后，从三个独立维度逐项检查。每个维度满分 10 分，最终总分是三个维度的平均值，保留一位小数。
+    </p>
+
+    <div class="dim-grid">
+      <div class="dim-card">
+        <div class="dim-icon">🎨</div>
+        <h3 data-i18n="dimAesTitle">美观性</h3>
+        <ul>
+          <li data-i18n="dimAes1">布局系统：是否使用 Flex / Grid 等现代布局</li>
+          <li data-i18n="dimAes2">配色丰富度：颜色数量与层次</li>
+          <li data-i18n="dimAes3">现代 CSS 特性：变量、渐变、阴影、滤镜</li>
+          <li data-i18n="dimAes4">微交互：悬停、过渡、关键帧动画</li>
+          <li data-i18n="dimAes5">响应式设计与字体层级</li>
+        </ul>
+      </div>
+
+      <div class="dim-card">
+        <div class="dim-icon">✨</div>
+        <h3 data-i18n="dimSimTitle">简洁度</h3>
+        <ul>
+          <li data-i18n="dimSim1">内联样式比例（越少越好）</li>
+          <li data-i18n="dimSim2">!important 滥用程度</li>
+          <li data-i18n="dimSim3">CSS 属性重复率</li>
+          <li data-i18n="dimSim4">DOM 嵌套深度</li>
+          <li data-i18n="dimSim5">文件体积与空标签</li>
+          <li data-i18n="dimSim6">加分：CSS 变量统一管理、语义化标签</li>
+        </ul>
+      </div>
+
+      <div class="dim-card">
+        <div class="dim-icon">⚙️</div>
+        <h3 data-i18n="dimFunTitle">功能性</h3>
+        <ul>
+          <li data-i18n="dimFun1">交互元素数量（按钮、输入框等）</li>
+          <li data-i18n="dimFun2">事件处理闭环</li>
+          <li data-i18n="dimFun3">DOM 操作丰富度</li>
+          <li data-i18n="dimFun4">数据能力：网络、存储、Canvas/SVG</li>
+          <li data-i18n="dimFun5">键盘 / 触摸事件支持</li>
+          <li data-i18n="dimFun6">错误处理与函数结构</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 下载 -->
+  <div class="section-block">
+    <h2 data-i18n="downloadTitle">下载</h2>
+    <p data-i18n="downloadBody">两种方式任选其一：如果你装过 Python 可以直接跑源码，否则下载 Windows 独立程序双击即用。</p>
+
+    <div class="download-grid">
+      <a class="download-btn" href="./scorer.py" download>
+        <span class="dl-icon">🐍</span>
+        <div>
+          <strong>scorer.py</strong>
+          <small data-i18n="dlPyNote">Python 源码 · 需要 pip install PySide6</small>
+        </div>
+      </a>
+
+      <a class="download-btn" href="./scorer.exe" download>
+        <span class="dl-icon">💻</span>
+        <div>
+          <strong>scorer.exe</strong>
+          <small data-i18n="dlExeNote">Windows 独立程序 · 双击即用 · 无需 Python</small>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- 使用说明 -->
+  <div class="section-block">
+    <h2 data-i18n="usageTitle">使用说明</h2>
+
+    <ol class="usage-list">
+      <li data-i18n="usage1">下载 <code>scorer.exe</code> 或 <code>scorer.py</code> 并运行。</li>
+      <li data-i18n="usage2">把任意 <code>.html</code> 文件拖进窗口（或者点右上角按钮选择文件）。</li>
+      <li data-i18n="usage3">程序会立刻分析并显示三个维度的评分和总分。</li>
+      <li data-i18n="usage4">每个维度下方会逐条列出加分/扣分的具体项，一眼看出分是怎么来的。</li>
+    </ol>
+  </div>
+
+  <!-- 自己打包 -->
+  <div class="section-block">
+    <h2 data-i18n="buildTitle">自己打包（可选）</h2>
+    <p data-i18n="buildBody">如果你想自己从源码构建 Windows 独立程序，用 PyInstaller 一条命令即可。</p>
+
+    <div class="code-block">
+<code>pip install pyinstaller
+cd scorer
+pyinstaller --onefile --windowed --name scorer --clean --noconfirm scorer.py</code>
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer" data-i18n="footer">纯静态站点 · 用心做鹈鹕</footer>
+
+<script>
+/* ============================================================
+ * scorer 页面独立翻译（不依赖主站 i18n.js）
+ * ============================================================ */
+const scorerI18n = {
+  zh: {
+    brand: "AI 鹈鹕作品展",
+    backHome: "← 返回首页",
+    scorerPill: "开源工具 · PySide6 · Python",
+    scorerTitle: "AI 鹈鹕作品评分器",
+    scorerSub: "一个可以拖入 HTML 文件、自动分析美观性/简洁度/功能性的桌面小工具。",
+
+    whatTitle: "这是什么？",
+    whatBody: "这是本站用于给每个 AI 生成的网页作品打分的工具。它不会「看」作品长什么样，而是通过分析 HTML 源码里的结构、样式、脚本，按照三个维度给出一组客观分数。所有作品页面上展示的评分，都是由这个程序生成的。",
+
+    howTitle: "它是怎么打分的",
+    howBody: "程序读取 HTML 源码后，从三个独立维度逐项检查。每个维度满分 10 分，最终总分是三个维度的平均值，保留一位小数。",
+
+    dimAesTitle: "美观性",
+    dimAes1: "布局系统：是否使用 Flex / Grid 等现代布局",
+    dimAes2: "配色丰富度：颜色数量与层次",
+    dimAes3: "现代 CSS 特性：变量、渐变、阴影、滤镜",
+    dimAes4: "微交互：悬停、过渡、关键帧动画",
+    dimAes5: "响应式设计与字体层级",
+
+    dimSimTitle: "简洁度",
+    dimSim1: "内联样式比例（越少越好）",
+    dimSim2: "!important 滥用程度",
+    dimSim3: "CSS 属性重复率",
+    dimSim4: "DOM 嵌套深度",
+    dimSim5: "文件体积与空标签",
+    dimSim6: "加分：CSS 变量统一管理、语义化标签",
+
+    dimFunTitle: "功能性",
+    dimFun1: "交互元素数量（按钮、输入框等）",
+    dimFun2: "事件处理闭环",
+    dimFun3: "DOM 操作丰富度",
+    dimFun4: "数据能力：网络、存储、Canvas/SVG",
+    dimFun5: "键盘 / 触摸事件支持",
+    dimFun6: "错误处理与函数结构",
+
+    downloadTitle: "下载",
+    downloadBody: "两种方式任选其一：如果你装过 Python 可以直接跑源码，否则下载 Windows 独立程序双击即用。",
+    dlPyNote: "Python 源码 · 需要 pip install PySide6",
+    dlExeNote: "Windows 独立程序 · 双击即用 · 无需 Python",
+
+    usageTitle: "使用说明",
+    usage1: "下载 scorer.exe 或 scorer.py 并运行。",
+    usage2: "把任意 .html 文件拖进窗口（或者点右上角按钮选择文件）。",
+    usage3: "程序会立刻分析并显示三个维度的评分和总分。",
+    usage4: "每个维度下方会逐条列出加分/扣分的具体项，一眼看出分是怎么来的。",
+
+    buildTitle: "自己打包（可选）",
+    buildBody: "如果你想自己从源码构建 Windows 独立程序，用 PyInstaller 一条命令即可。",
+
+    footer: "纯静态站点 · 用心做鹈鹕"
+  },
+  en: {
+    brand: "AI Pelican Exhibition",
+    backHome: "← Back to home",
+    scorerPill: "Open-source · PySide6 · Python",
+    scorerTitle: "AI Pelican Scorer",
+    scorerSub: "A small desktop tool: drop an HTML file in, get automatic scores for aesthetics, simplicity, and functionality.",
+
+    whatTitle: "What is this?",
+    whatBody: "This is the tool used to score every AI-generated webpage on this site. It doesn't \"look\" at the page — instead it analyzes the HTML source (structure, styles, scripts) and produces objective scores across three dimensions. Every score shown on a work page comes from this program.",
+
+    howTitle: "How scoring works",
+    howBody: "After reading the HTML, the program checks each of the three independent dimensions. Each dimension is scored out of 10, and the final score is the average, rounded to one decimal.",
+
+    dimAesTitle: "Aesthetics",
+    dimAes1: "Layout: Flex / Grid and other modern layout systems",
+    dimAes2: "Color variety and hierarchy",
+    dimAes3: "Modern CSS: variables, gradients, shadows, filters",
+    dimAes4: "Micro-interactions: hover, transitions, keyframes",
+    dimAes5: "Responsive design and typographic hierarchy",
+
+    dimSimTitle: "Simplicity",
+    dimSim1: "Inline style ratio (lower is better)",
+    dimSim2: "!important overuse",
+    dimSim3: "CSS property repetition",
+    dimSim4: "DOM nesting depth",
+    dimSim5: "File size and empty tags",
+    dimSim6: "Bonus: CSS variable management, semantic tags",
+
+    dimFunTitle: "Functionality",
+    dimFun1: "Number of interactive elements (buttons, inputs)",
+    dimFun2: "Event handling coverage",
+    dimFun3: "DOM manipulation richness",
+    dimFun4: "Data capabilities: fetch, storage, Canvas/SVG",
+    dimFun5: "Keyboard / touch event support",
+    dimFun6: "Error handling and function structure",
+
+    downloadTitle: "Download",
+    downloadBody: "Pick either one: run the Python source if you have Python, or grab the standalone Windows binary.",
+    dlPyNote: "Python source · needs pip install PySide6",
+    dlExeNote: "Standalone Windows app · double-click to run · no Python needed",
+
+    usageTitle: "How to use",
+    usage1: "Download scorer.exe or scorer.py and run it.",
+    usage2: "Drag any .html file into the window (or click the top-right button).",
+    usage3: "The program immediately analyzes the file and shows three dimension scores plus a total.",
+    usage4: "Each dimension lists every bonus/penalty item, so you can see exactly how the score was formed.",
+
+    buildTitle: "Build it yourself (optional)",
+    buildBody: "If you want to build the Windows binary from source, use PyInstaller with one command.",
+
+    footer: "Pure Static Site · Made with ❤️ for Pelicans"
+  },
+  meme: {
+    brand: "大肥鱼做的鹈鹕蹲点",
+    backHome: "← 回家看看",
+    scorerPill: "开源工具 · PySide6 · Python",
+    scorerTitle: "鹈鹕作品打分机",
+    scorerSub: "拖个 HTML 进去，机器自己给你算分，算完你还得服。",
+
+    whatTitle: "这玩意是啥",
+    whatBody: "本站所有作品的分都是它打的。它不会「看」，它就扒源码，扒完按三个维度给分。所有作品页面上那仨数，全出自这台机器。",
+
+    howTitle: "它咋打的",
+    howBody: "读源码，三个维度各查各的，每项满分 10，最后取平均，保留一位小数。",
+
+    dimAesTitle: "好不好看",
+    dimAes1: "布局：有没有 Flex / Grid 这种正经货",
+    dimAes2: "配色：颜色多不多，有没有层次",
+    dimAes3: "现代 CSS：变量、渐变、阴影、滤镜",
+    dimAes4: "微交互：hover、过渡、关键帧",
+    dimAes5: "响应式和字体层级",
+
+    dimSimTitle: "啰不啰嗦",
+    dimSim1: "内联样式比例（越少越好）",
+    dimSim2: "!important 用得多不多",
+    dimSim3: "CSS 属性重复",
+    dimSim4: "DOM 嵌套多深",
+    dimSim5: "文件多大，有没有空标签",
+    dimSim6: "加分：CSS 变量统一管理、语义化标签",
+
+    dimFunTitle: "能不能用",
+    dimFun1: "交互元素多不多（按钮、输入框）",
+    dimFun2: "事件处理全不全",
+    dimFun3: "DOM 操作丰富不丰富",
+    dimFun4: "数据能力：fetch、存储、Canvas/SVG",
+    dimFun5: "键鼠触摸支持",
+    dimFun6: "错误处理和函数结构",
+
+    downloadTitle: "下载",
+    downloadBody: "两种，爱下哪个下哪个。装了 Python 就跑源码，没装就下 exe 双击。",
+    dlPyNote: "Python 源码 · 得先 pip install PySide6",
+    dlExeNote: "Windows 独立程序 · 双击就跑 · 不用 Python",
+
+    usageTitle: "咋用",
+    usage1: "下 scorer.exe 或 scorer.py，跑起来。",
+    usage2: "把 .html 拖进窗口，或者右上角点按钮挑。",
+    usage3: "机器立马给你算分，三个维度加总分。",
+    usage4: "每个维度下面还给你列明白哪个加哪个扣，别不服。",
+
+    buildTitle: "想自己打包也行",
+    buildBody: "想自己从源码打 Windows 程序，PyInstaller 一条命令搞定。",
+
+    footer: "纯静态站点 · 大肥鱼爱吃鹈鹕"
+  }
+};
+
+function setScorerLang(lang) {
+  if (!scorerI18n[lang]) lang = 'zh';
+  document.documentElement.dataset.lang = lang;
+
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if (scorerI18n[lang][key] !== undefined) {
+      el.textContent = scorerI18n[lang][key];
+    }
+  });
+
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.lang === lang);
+  });
+
+  try { localStorage.setItem('preferred-lang', lang); } catch (e) {}
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  let saved = 'zh';
+  try { saved = localStorage.getItem('preferred-lang') || 'zh'; } catch (e) {}
+  setScorerLang(saved);
+
+  const langSwitch = document.getElementById('langSwitch');
+  if (langSwitch) {
+    langSwitch.addEventListener('click', (e) => {
+      const btn = e.target.closest('.lang-btn');
+      if (btn) setScorerLang(btn.dataset.lang);
+    });
+  }
+});
+</script>
+
+</body>
+</html>

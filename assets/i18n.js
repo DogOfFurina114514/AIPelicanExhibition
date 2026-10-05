@@ -161,7 +161,7 @@ const translations = {
     doubaoDesc: "豆包系列交上来的鹈鹕。",
     mimoName: "米末",
     mimoDesc: "米末系列交上来的鹈鹕。",
-    footer: "纯静态站点 · 大肥鱼和请问都爱吃鹈鹕",
+    footer: "纯静态站点 · 大肥鱼爱吃鹈鹕",
 
     dsPageTitle: "大肥鱼聚集地",
     dsPageSub: "大肥鱼系列，深海来的神秘力量，主打一个性价比和开源，脑子里装满了 V3、R1 和 V4。",

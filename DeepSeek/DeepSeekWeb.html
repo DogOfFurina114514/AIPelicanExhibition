@@ -42,7 +42,7 @@
       </div>
       <div class="meta-item">
         <span class="meta-label" data-i18n="timeLabel">耗时：</span>
-        <span data-i18n="dsWebTime">待补充（请在此填写）</span>
+        <span data-time-key="dsWeb">—</span>
       </div>
       <div class="meta-item">
         <span class="meta-label" data-i18n="versionLabel">版本：</span>
@@ -56,6 +56,42 @@
     <p data-i18n="dsWebIntro">DeepSeek 网页版（chat.deepseek.com）是官方提供的免费 AI 对话入口...</p>
   </div>
 
+  <div class="score-box" data-score-key="dsWeb">
+    <h3 data-i18n="scoreTitle">作品评分</h3>
+    <div class="score-layout">
+      <div class="score-triangle">
+        <svg class="tri-svg" viewBox="0 0 260 230" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+          <defs>
+            <linearGradient id="triGrad-dsWeb" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="rgba(79,70,229,0.10)"/>
+              <stop offset="100%" stop-color="rgba(124,58,237,0.12)"/>
+            </linearGradient>
+          </defs>
+          <polygon points="130,15 15,215 245,215"
+                   fill="url(#triGrad-dsWeb)"
+                   stroke="var(--primary)"
+                   stroke-width="2"
+                   stroke-linejoin="round"/>
+        </svg>
+        <div class="tri-point tri-top">
+          <span class="tri-label" data-i18n="scoreAesthetics">美观性</span>
+          <span class="tri-value" data-score="aesthetics">—</span>
+        </div>
+        <div class="tri-point tri-bl">
+          <span class="tri-label" data-i18n="scoreSimplicity">简洁度</span>
+          <span class="tri-value" data-score="simplicity">—</span>
+        </div>
+        <div class="tri-point tri-br">
+          <span class="tri-label" data-i18n="scoreFunctionality">功能性</span>
+          <span class="tri-value" data-score="functionality">—</span>
+        </div>
+      </div>
+      <div class="score-total-side">
+        <span class="total-label" data-i18n="scoreTotal">总分</span>
+        <span class="total-value" data-score="total">—</span>
+      </div>
+    </div>
+  </div>
   <div class="preview-container">
     <div class="preview-header">
       <span class="preview-dot red"></span>
@@ -69,6 +105,7 @@
 
 <footer class="footer" data-i18n="footer">纯静态站点 · 用心做鹈鹕</footer>
 
+<script src="../assets/data.js"></script>
 <script src="../assets/i18n.js"></script>
 </body>
 </html>

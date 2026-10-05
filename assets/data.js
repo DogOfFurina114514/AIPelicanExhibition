@@ -33,9 +33,9 @@ const workData = {
       meme: "快得离谱（大肥鱼跑得快）"
     },
     scores: {
-      aesthetics:    0.0,   // 美观性
-      simplicity:    0.0,   // 简洁度
-      functionality: 0.0    // 功能性
+      aesthetics:    5.8,   // 美观性
+      simplicity:    10.0,   // 简洁度
+      functionality: 4.6    // 功能性
     }
   },
 
@@ -63,9 +63,9 @@ const workData = {
       meme: "最大就完事了"
     },
     scores: {
-      aesthetics:    0.0,
-      simplicity:    0.0,
-      functionality: 0.0
+      aesthetics:    9.0,
+      simplicity:    9.6,
+      functionality: 7.3
     }
   },
 
@@ -77,9 +77,9 @@ const workData = {
       meme: "有点快，但不多"
     },
     scores: {
-      aesthetics:    0.0,
-      simplicity:    0.0,
-      functionality: 0.0
+      aesthetics:    6.5,
+      simplicity:    10.0,
+      functionality: 5.8
     }
   },
 
@@ -93,8 +93,8 @@ const workData = {
       meme: "你别管成品怎么样，你就说快不快吧"
     },
     scores: {
-      aesthetics:    0.0,
-      simplicity:    0.0,
+      aesthetics:    2.3,
+      simplicity:    9.5,
       functionality: 0.0
     }
   },
@@ -109,9 +109,9 @@ const workData = {
       meme: "快在哪"
     },
     scores: {
-      aesthetics:    0.0,
-      simplicity:    0.0,
-      functionality: 0.0
+      aesthetics:    1.5,
+      simplicity:    10.0,
+      functionality: 2.8
     }
   },
 
