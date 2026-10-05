@@ -6,6 +6,7 @@
   --primary: #4f46e5;
   --ds-color: #0077ff;
   --qwen-color: #7c3aed;
+  --doubao-color: #114514;
   --border: #e5e7eb;
   --radius: 16px;
   --shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -2px rgba(0,0,0,0.05);
@@ -188,6 +189,7 @@ body {
 }
 .card.ds::before { background: var(--ds-color); }
 .card.qwen::before { background: var(--qwen-color); }
+.card.doubao::before { background: var(--doubao-color); }
 .card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-hover);
@@ -222,7 +224,7 @@ body {
   line-height: 1.5;
 }
 
-/* ===== 头像 / 图标（修复版） ===== */
+/* ===== 头像 / 图标 ===== */
 .avatar {
   position: relative;
   display: flex;
@@ -241,6 +243,7 @@ body {
 }
 .avatar.ds { color: var(--ds-color); }
 .avatar.qwen { color: var(--qwen-color); }
+.avatar.doubao { color: var(--doubao-color); }
 .avatar.lg { width: 56px; height: 56px; border-radius: 14px; font-size: 1.15rem; }
 
 .avatar-img {

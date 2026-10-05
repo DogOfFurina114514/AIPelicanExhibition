@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>鹈鹕骑车动画</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #87CEEB;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .scene {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        /* 地面 */
+        .ground {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 120px;
+            background-color: #7cb342;
+        }
+        .road {
+            position: absolute;
+            bottom: 40px;
+            width: 100%;
+            height: 40px;
+            background: #666666;
+        }
+        .road-line {
+            position: absolute;
+            height: 4px;
+            width: 60px;
+            background: #fff;
+            top: 18px;
+            animation: roadMove 1s linear infinite;
+        }
+        @keyframes roadMove {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-120px); }
+        }
+
+        /* 整体：鹈鹕+自行车 */
+        .pelican-bike {
+            position: absolute;
+            bottom: 60px;
+            left: -200px;
+            animation: drive 8s linear infinite;
+        }
+        @keyframes drive {
+            0% { left: -200px; }
+            100% { left: 110%; }
+        }
+
+        /* 自行车 */
+        .bike {
+            position: relative;
+            width: 160px;
+            height: 90px;
+        }
+        .wheel {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 5px solid #222;
+            position: absolute;
+            bottom: 0;
+            animation: wheelRotate 0.4s linear infinite;
+        }
+        .wheel.front { right:10px; }
+        .wheel.back { left:10px; }
+        @keyframes wheelRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .bike-frame{
+            position:absolute;
+            bottom:25px;
+            left:35px;
+            width:90px;
+            height:6px;
+            background:#333;
+            transform: rotate(15deg);
+        }
+        .seat{
+            position:absolute;
+            bottom:42px;
+            left:55px;
+            width:22px;
+            height:6px;
+            background:#222;
+            border-radius:3px;
+        }
+
+        /* 鹈鹕 */
+        .pelican {
+            position:absolute;
+            bottom:45px;
+            left:40px;
+        }
+        .body{
+            width:55px;
+            height:40px;
+            background:#ffffff;
+            border-radius:40%;
+        }
+        .head{
+            position:absolute;
+            top:-28px;
+            right:-15px;
+            width:32px;
+            height:26px;
+            background:#fff;
+            border-radius:50%;
+        }
+        .beak{
+            position:absolute;
+            top:-12px;
+            right:-38px;
+            width:35px;
+            height:18px;
+            background:#ffb300;
+            border-radius:0 12px 12px 0;
+        }
+        .eye{
+            width:5px;
+            height:5px;
+            background:#000;
+            border-radius:50%;
+            position:absolute;
+            top:-22px;
+            right:-2px;
+        }
+        .wing{
+            position:absolute;
+            width:28px;
+            height:14px;
+            background:#eeeeee;
+            border-radius:40%;
+            top:5px;
+            left:-8px;
+            animation:wingFlap 0.4s ease-in-out infinite alternate;
+        }
+        @keyframes wingFlap {
+            0% { transform: rotate(-10deg); }
+            100% { transform: rotate(10deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="scene">
+        <div class="ground"></div>
+        <div class="road">
+            <div class="road-line"></div>
+        </div>
+
+        <div class="pelican-bike">
+            <div class="bike">
+                <div class="wheel back"></div>
+                <div class="wheel front"></div>
+                <div class="bike-frame"></div>
+                <div class="seat"></div>
+            </div>
+            <div class="pelican">
+                <div class="body"></div>
+                <div class="head"></div>
+                <div class="eye"></div>
+                <div class="beak"></div>
+                <div class="wing"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
