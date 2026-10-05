@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI 鹈鹕作品展</title>
+<meta name="description" content="AI 鹈鹕作品展 —— 同一个题目交给不同的 AI，看谁画得最像样。">
+<link rel="stylesheet" href="./assets/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="./">
+      <span class="brand-mark"></span>
+      <span data-i18n="brand">AI 鹈鹕作品展</span>
+    </a>
+    <div class="lang-switch" id="langSwitch">
+      <button class="lang-btn" data-lang="zh">中文</button>
+      <button class="lang-btn" data-lang="en">English</button>
+      <button class="lang-btn" data-lang="meme">梗语</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <span class="pill" data-i18n="heroTag">纯前端 · 无后端</span>
+    <h1 class="hero-title" data-i18n="heroTitle">AI 鹈鹕作品展</h1>
+    <p class="hero-sub" data-i18n="heroSub">同一个题目交给不同的 AI，看谁的鹈鹕最像样。全部是单文件 HTML，点开即看。</p>
+  </section>
+
+  <section>
+    <h2 class="section-title" data-i18n="sectionTitle">选择展区</h2>
+    <div class="card-grid">
+
+      <a class="card ds" href="./DeepSeek/">
+        <div class="card-head">
+          <span class="avatar ds">
+            <img src="./DeepSeek/icon.svg" alt="DeepSeek" class="avatar-img" 
+                 onload="this.style.opacity='1'; this.nextElementSibling.style.display='none';" 
+                 onerror="this.style.display='none';">
+            <span class="avatar-fallback">DS</span>
+          </span>
+          <span class="card-arrow">→</span>
+        </div>
+        <h3 class="card-name" data-i18n="dsName">DeepSeek</h3>
+        <p class="card-desc" data-i18n="dsDesc">DeepSeek 系列模型交上来的鹈鹕。</p>
+      </a>
+
+      <a class="card qwen" href="./Qwen/">
+        <div class="card-head">
+          <span class="avatar qwen">
+            <img src="./Qwen/icon.svg" alt="Qwen" class="avatar-img" 
+                 onload="this.style.opacity='1'; this.nextElementSibling.style.display='none';" 
+                 onerror="this.style.display='none';">
+            <span class="avatar-fallback">Q</span>
+          </span>
+          <span class="card-arrow">→</span>
+        </div>
+        <h3 class="card-name" data-i18n="qwenName">Qwen</h3>
+        <p class="card-desc" data-i18n="qwenDesc">Qwen 系列模型交上来的鹈鹕。</p>
+      </a>
+
+    </div>
+  </section>
+</main>
+
+<footer class="footer" data-i18n="footer">纯静态站点 · 用心做鹈鹕</footer>
+
+<script src="./assets/i18n.js"></script>
+</body>
+</html>
