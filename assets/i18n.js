@@ -190,7 +190,7 @@ const translations = {
     omniFlashDesc: "快，但全能。",
 
     doubaoPageTitle: "豆包区域",
-    doubaoPageSub: "豆包系列，字节跳动家的，原名云雀，2024年5月出生，2026年2月进化到2.0，数学竞赛拿了金牌(bushi)，主打一个真实世界复杂任务执行力(bushi)。",
+    doubaoPageSub: "豆包系列，字节跳蛋家的，原名云雀，2024年5月出生，2026年2月进化到2.0，数学竞赛拿了金牌(bushi)，主打一个真实世界复杂任务执行力(bushi)。",
     doubaoWebName: "豆包本包",
     doubaoWebDesc: "标准网页对话版本。",
     doubaoModelName: "豆包",
