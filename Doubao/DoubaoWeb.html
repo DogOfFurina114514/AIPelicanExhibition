@@ -9,20 +9,24 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { width:0; height:0; display:no
 a, button, input, select, textarea { -webkit-tap-highlight-color: transparent; }
 </style>
 <script>
-/* 站内跳转：源页面滚动过才播放收缩→展开（v6） */
+/* 站内跳转：源页面滚动过 → 首帧收缩 → 立即平滑展开（v7） */
 (function(){
   var KEY = 'aip_prev_scrolled';
-  var DELAY = 1200;
 
   function playFromInternal(){
-    document.documentElement.classList.add('from-internal');
-    setTimeout(function(){
-      document.documentElement.classList.remove('from-internal');
-      if (window.scrollY > 20) {
-        var topbar = document.querySelector('.topbar');
-        if (topbar) topbar.classList.add('scrolled');
-      }
-    }, DELAY);
+    var html = document.documentElement;
+    html.classList.add('from-internal');
+
+    // 双 rAF：先让浏览器渲染收缩首帧，再移除类触发 transition 展开
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        html.classList.remove('from-internal');
+        if (window.scrollY > 20) {
+          var topbar = document.querySelector('.topbar');
+          if (topbar) topbar.classList.add('scrolled');
+        }
+      });
+    });
   }
 
   // 1. 读上次滚动状态，决定是否播放动画
@@ -35,7 +39,7 @@ a, button, input, select, textarea { -webkit-tap-highlight-color: transparent; }
     }
   } catch(e){}
 
-  // 2. 当前页面刚加载，还没滚动 → 立即重置为 '0'
+  // 2. 当前页面刚加载，重置为 '0'
   try { sessionStorage.setItem(KEY, '0'); } catch(e){}
 
   // 3. 实时监听滚动，更新状态
@@ -161,12 +165,25 @@ a, button, input, select, textarea { -webkit-tap-highlight-color: transparent; }
 
   <div class="preview-container">
     <div class="preview-header">
-      <span class="preview-dot red"></span>
-      <span class="preview-dot yellow"></span>
-      <span class="preview-dot green"></span>
-      <span style="margin-left: 0.5rem;" data-i18n="previewLabel">作品预览</span>
+      <div class="preview-dots">
+        <button class="preview-dot red" data-action="close" aria-label="关闭"></button>
+        <button class="preview-dot yellow" data-action="pip" aria-label="画中画"></button>
+        <button class="preview-dot green" data-action="fullscreen" aria-label="全屏"></button>
+      </div>
+      <span class="preview-title" data-i18n="previewLabel">作品预览</span>
+      <div class="preview-actions">
+        <button class="preview-action-btn" data-action="open-new" aria-label="在新标签页中打开">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </button>
+      </div>
     </div>
-    <iframe src="./works/DoubaoWeb.html" title="豆包 Web 作品" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+    <div class="preview-stage">
+      <div class="preview-placeholder">
+        <button class="preview-play" aria-label="播放">▶</button>
+        <span class="preview-play-text" data-i18n="previewPlay">点击预览作品</span>
+      </div>
+      <iframe class="preview-frame" data-src="./works/DoubaoWeb.html" title="作品预览" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+    </div>
   </div>
 </main>
 

@@ -54,6 +54,12 @@ const translations = {
     scoreSimplicity: "简洁度",
     scoreFunctionality: "功能性",
     scoreTotal: "总分",
+    previewPlay: "点击预览作品",
+    previewInPip: "已在画中画中打开",
+    previewOpenNew: "在新标签页中打开",
+    previewClose: "关闭",
+    previewPip: "画中画",
+    previewFullscreen: "全屏",
 
     dsWebTitle: "DeepSeek 网页对话",
     dsWebIntro: "DeepSeek 网页版（chat.deepseek.com）是官方提供的免费 AI 对话入口，支持智能对话问答、写作翻译、解题答疑等通用任务，提供联网搜索与“深度思考”推理模式。用户可上传文件与图片进行识别，历史对话在网页端与 App 端同步。",
@@ -128,6 +134,12 @@ const translations = {
     scoreSimplicity: "Simplicity",
     scoreFunctionality: "Functionality",
     scoreTotal: "Total",
+    previewPlay: "Click to preview",
+    previewInPip: "Opened in Picture-in-Picture",
+    previewOpenNew: "Open in new tab",
+    previewClose: "Close",
+    previewPip: "Picture in Picture",
+    previewFullscreen: "Fullscreen",
 
     dsWebTitle: "DeepSeek Web Chat",
     dsWebIntro: "DeepSeek Web (chat.deepseek.com) is the official free AI chat portal, supporting intelligent Q&A, writing, translation, and problem-solving. It offers web search and 'Deep Thinking' reasoning mode. Users can upload files and images for recognition, with chat history synced between web and App.",
@@ -202,6 +214,12 @@ const translations = {
     scoreSimplicity: "啰不啰嗦",
     scoreFunctionality: "能不能用",
     scoreTotal: "综合",
+    previewPlay: "点一下看东西",
+    previewInPip: "扔到小窗里了",
+    previewOpenNew: "开个新标签看",
+    previewClose: "关了",
+    previewPip: "小窗",
+    previewFullscreen: "拉满",
 
     dsWebTitle: "大肥鱼本鱼",
     dsWebIntro: "大肥鱼本鱼，平时在 chat.deepseek.com 蹲着，能聊天、能搜网、能深度思考，还能啃文件。",
@@ -571,6 +589,169 @@ document.addEventListener('DOMContentLoaded', () => {
   renderScores();
   applyMonetCardColors();
 });
+
+
+
+
+
+
+/* ============================================================
+ *  作品预览交互
+ * ============================================================ */
+function initPreview() {
+  document.querySelectorAll('.preview-container').forEach(container => {
+    const frame = container.querySelector('.preview-frame');
+    const placeholder = container.querySelector('.preview-placeholder');
+    const playBtn = container.querySelector('.preview-play');
+    const openNewBtn = container.querySelector('[data-action="open-new"]');
+    const dots = container.querySelectorAll('.preview-dot');
+    const stage = container.querySelector('.preview-stage');
+
+    if (!frame) return;
+    const src = frame.dataset.src;
+    if (!src) return;
+
+    let savedScrollY = 0;
+    let pipWindow = null;
+    let isPlaying = false;
+
+    const play = () => {
+      if (!isPlaying) {
+        frame.src = src;
+        isPlaying = true;
+      }
+      container.classList.add('playing');
+    };
+
+    const close = () => {
+      frame.src = 'about:blank';
+      isPlaying = false;
+      container.classList.remove('playing');
+      if (pipWindow && !pipWindow.closed) {
+        pipWindow.close();
+      }
+    };
+
+    const openNew = () => {
+      window.open(src, '_blank', 'noopener');
+    };
+
+    const fullscreen = () => {
+      if (!stage) return;
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      } else {
+        savedScrollY = window.scrollY;
+        stage.requestFullscreen().catch(() => {});
+      }
+    };
+
+    const pip = async () => {
+      if (!('documentPictureInPicture' in window)) {
+        alert('当前浏览器不支持画中画模式，请使用 Chrome/Edge 116+');
+        return;
+      }
+      if (pipWindow && !pipWindow.closed) {
+        pipWindow.focus();
+        return;
+      }
+
+      // 只在未播放时加载，已播放直接搬（避免重设 src 导致重载）
+      if (!isPlaying) play();
+
+      try {
+        pipWindow = await documentPictureInPicture.requestWindow({
+          width: 800,
+          height: 600
+        });
+
+        // 复制样式表
+        [...document.styleSheets].forEach(sheet => {
+          try {
+            const cssRules = [...sheet.cssRules].map(r => r.cssText).join('');
+            const style = pipWindow.document.createElement('style');
+            style.textContent = cssRules;
+            pipWindow.document.head.appendChild(style);
+          } catch (e) {}
+        });
+
+        pipWindow.document.body.style.margin = '0';
+        pipWindow.document.body.style.background = '#000';
+
+        // PiP 里隐藏 placeholder（保险）
+        if (placeholder) placeholder.style.display = 'none';
+
+        // 只把 iframe 搬到 PiP（保留 stage 在原位）
+        frame.style.width = '100%';
+        frame.style.height = '100%';
+        pipWindow.document.body.appendChild(frame);
+
+        // 原位置显示提示（加在 stage 里，避免容器塌缩）
+        let curLang = 'zh';
+        try { curLang = localStorage.getItem('preferred-lang') || 'zh'; } catch(e){}
+        const pipText = (typeof translations !== 'undefined' && translations[curLang] && translations[curLang].previewInPip) || '已在画中画中打开';
+
+        const pipNotice = document.createElement('div');
+        pipNotice.className = 'pip-notice';
+        pipNotice.innerHTML =
+          '<span class="pip-notice-icon">🖼️</span>' +
+          '<span class="pip-notice-text">' + pipText + '</span>';
+        stage.appendChild(pipNotice);
+
+        // 隐藏控制按钮
+        container.classList.add('in-pip');
+
+        // PiP 关闭时恢复
+        pipWindow.addEventListener('pagehide', () => {
+          if (placeholder) placeholder.style.display = '';
+
+          // iframe 搬回 stage
+          frame.style.width = '';
+          frame.style.height = '';
+          stage.appendChild(frame);
+
+          pipNotice.remove();
+          container.classList.remove('in-pip');
+
+          pipWindow = null;
+        });
+      } catch (e) {
+        console.error('PiP failed:', e);
+      }
+    };
+
+    playBtn?.addEventListener('click', (e) => { e.stopPropagation(); play(); });
+    placeholder?.addEventListener('click', play);
+
+    dots.forEach(dot => {
+      dot.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const action = dot.dataset.action;
+        if (action === 'close') close();
+        else if (action === 'pip') pip();
+        else if (action === 'fullscreen') fullscreen();
+      });
+    });
+
+    openNewBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openNew();
+    });
+
+    document.addEventListener('fullscreenchange', () => {
+      if (!document.fullscreenElement) {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            window.scrollTo(0, savedScrollY);
+          });
+        });
+      }
+    });
+  });
+}
+
+document.addEventListener('DOMContentLoaded', initPreview);
+
 
 
 
