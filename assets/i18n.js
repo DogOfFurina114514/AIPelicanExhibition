@@ -297,7 +297,43 @@ function renderScores() {
 
     const totalEl = box.querySelector('[data-score="total"]');
     if (totalEl) totalEl.textContent = total;
+
+    updateInnerTriangle(box, a, s, f);
   });
+}
+
+function updateInnerTriangle(box, a, s, f) {
+  const inner = box.querySelector('.tri-inner');
+  if (!inner) return;
+
+  const A = { x: 160, y: 60  };
+  const B = { x: 40,  y: 240 };
+  const C = { x: 280, y: 240 };
+
+  const G = {
+    x: (A.x + B.x + C.x) / 3,
+    y: (A.y + B.y + C.y) / 3
+  };
+
+  const scale = rating => {
+    const r = Math.max(0, Math.min(10, rating));
+    return 0.35 + 0.65 * (r / 10);
+  };
+
+  const shrink = (P, rating) => {
+    const t = scale(rating);
+    return {
+      x: G.x + (P.x - G.x) * t,
+      y: G.y + (P.y - G.y) * t
+    };
+  };
+
+  const A2 = shrink(A, a);
+  const B2 = shrink(B, s);
+  const C2 = shrink(C, f);
+
+  const fmt = p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`;
+  inner.setAttribute('points', `${fmt(A2)} ${fmt(B2)} ${fmt(C2)}`);
 }
 
 /* ============================================================
@@ -487,6 +523,36 @@ function applyMonetCardColors() {
 }
 
 /* ============================================================
+ *  顶栏滚动效果：滚动后收缩为悬浮液态玻璃胶囊
+ * ============================================================ */
+function initTopbar() {
+  const topbar = document.querySelector('.topbar');
+  if (!topbar) return;
+
+  const THRESHOLD = 20;
+  let ticking = false;
+
+  const update = () => {
+    if (window.scrollY > THRESHOLD) {
+      topbar.classList.add('scrolled');
+    } else {
+      topbar.classList.remove('scrolled');
+    }
+    ticking = false;
+  };
+
+  const onScroll = () => {
+    if (!ticking) {
+      window.requestAnimationFrame(update);
+      ticking = true;
+    }
+  };
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  update();
+}
+
+/* ============================================================
  *  初始化
  * ============================================================ */
 document.addEventListener('DOMContentLoaded', () => {
@@ -501,7 +567,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (btn) setLanguage(btn.dataset.lang);
     });
   }
-
+  initTopbar();
   renderScores();
   applyMonetCardColors();
 });

@@ -60,38 +60,54 @@
     <h3 data-i18n="scoreTitle">作品评分</h3>
     <div class="score-layout">
       <div class="score-triangle">
-        <svg class="tri-svg" viewBox="0 0 260 230" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+        <div class="tri-label tri-label-top">
+          <span data-i18n="scoreAesthetics">美观性</span>
+          <span class="tri-value" data-score="aesthetics">—</span>
+        </div>
+
+        <svg class="tri-svg" viewBox="0 0 320 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
           <defs>
-            <linearGradient id="triGrad-dsWeb" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="rgba(79,70,229,0.10)"/>
-              <stop offset="100%" stop-color="rgba(124,58,237,0.12)"/>
+            <linearGradient id="triGradOuter" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="rgba(79,70,229,0.05)"/>
+              <stop offset="100%" stop-color="rgba(124,58,237,0.07)"/>
+            </linearGradient>
+            <linearGradient id="triGradInner" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="rgba(79,70,229,0.55)"/>
+              <stop offset="100%" stop-color="rgba(124,58,237,0.65)"/>
             </linearGradient>
           </defs>
-          <polygon points="130,15 15,215 245,215"
-                   fill="url(#triGrad-dsWeb)"
+          <polygon points="160,60 40,240 280,240"
+                   fill="url(#triGradOuter)"
                    stroke="var(--primary)"
                    stroke-width="2"
                    stroke-linejoin="round"/>
+          <polygon class="tri-inner"
+                   points="160,180 160,180 160,180"
+                   fill="url(#triGradInner)"
+                   stroke="var(--primary)"
+                   stroke-width="1.5"
+                   stroke-linejoin="round"
+                   opacity="0.9"/>
         </svg>
-        <div class="tri-point tri-top">
-          <span class="tri-label" data-i18n="scoreAesthetics">美观性</span>
-          <span class="tri-value" data-score="aesthetics">—</span>
-        </div>
-        <div class="tri-point tri-bl">
-          <span class="tri-label" data-i18n="scoreSimplicity">简洁度</span>
+
+        <div class="tri-label tri-label-bl">
+          <span data-i18n="scoreSimplicity">简洁度</span>
           <span class="tri-value" data-score="simplicity">—</span>
         </div>
-        <div class="tri-point tri-br">
-          <span class="tri-label" data-i18n="scoreFunctionality">功能性</span>
+
+        <div class="tri-label tri-label-br">
+          <span data-i18n="scoreFunctionality">功能性</span>
           <span class="tri-value" data-score="functionality">—</span>
         </div>
       </div>
+
       <div class="score-total-side">
         <span class="total-label" data-i18n="scoreTotal">总分</span>
         <span class="total-value" data-score="total">—</span>
       </div>
     </div>
   </div>
+
   <div class="preview-container">
     <div class="preview-header">
       <span class="preview-dot red"></span>

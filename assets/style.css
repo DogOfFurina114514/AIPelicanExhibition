@@ -44,23 +44,102 @@ body {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
+  padding: 0.9rem 2rem;
+  background: transparent;
+  transition: padding 0.45s cubic-bezier(0.4, 0, 0.2, 1);
 }
-@media (prefers-color-scheme: dark) {
-  .topbar { background: rgba(30, 41, 59, 0.8); }
-}
+
 .topbar-inner {
-  max-width: 1000px;
+  max-width: 1400px;                /* 默认：向两边张开 */
   margin: 0 auto;
-  padding: 1rem 1.5rem;
+  padding: 0.9rem 1.25rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+  position: relative;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  transition:
+    max-width 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    padding 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+    background 0.45s ease,
+    border-color 0.45s ease,
+    box-shadow 0.45s ease;
 }
+
+/* ---- 滚动状态：明显收窄成悬浮胶囊 ---- */
+.topbar.scrolled {
+  padding: 0.7rem 2rem;
+}
+
+.topbar.scrolled .topbar-inner {
+  max-width: 880px;                 /* 收窄 */
+  padding: 0.6rem 1.5rem;
+
+  /* 亚克力底 */
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+
+  /* 液态玻璃边缘 */
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  box-shadow:
+    0 8px 32px rgba(15, 23, 42, 0.08),
+    0 2px 8px rgba(15, 23, 42, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.35),
+    inset 1px 0 0 rgba(255, 255, 255, 0.4),
+    inset -1px 0 0 rgba(255, 255, 255, 0.4);
+}
+
+/* 液态玻璃高光层 */
+.topbar.scrolled .topbar-inner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0.08) 35%,
+    rgba(255, 255, 255, 0) 55%,
+    rgba(255, 255, 255, 0.28) 100%
+  );
+}
+
+/* 深色模式 */
+@media (prefers-color-scheme: dark) {
+  .topbar.scrolled .topbar-inner {
+    background: rgba(30, 41, 59, 0.5);
+    border-color: rgba(148, 163, 184, 0.15);
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.32),
+      0 2px 8px rgba(0, 0, 0, 0.16),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.03);
+  }
+  .topbar.scrolled .topbar-inner::before {
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.12) 0%,
+      rgba(255, 255, 255, 0.02) 35%,
+      rgba(255, 255, 255, 0) 55%,
+      rgba(255, 255, 255, 0.06) 100%
+    );
+  }
+}
+
+/* 窄屏（<720px）：默认也收窄一点，滚动时不至于太挤 */
+@media (max-width: 720px) {
+  .topbar { padding: 0.75rem 1rem; }
+  .topbar-inner { padding: 0.8rem 1rem; }
+  .topbar.scrolled { padding: 0.6rem 1rem; }
+  .topbar.scrolled .topbar-inner { max-width: 100%; padding: 0.55rem 1rem; }
+}
+
 .brand {
   display: flex;
   align-items: center;
@@ -70,6 +149,8 @@ body {
   font-weight: 700;
   font-size: 1.1rem;
   letter-spacing: -0.02em;
+  position: relative;
+  z-index: 1;
 }
 .brand-mark {
   width: 12px;
@@ -88,6 +169,8 @@ body {
   border-radius: 999px;
   border: 1px solid var(--border);
   flex-shrink: 0;
+  position: relative;
+  z-index: 1;
 }
 .lang-btn {
   padding: 0.4rem 0.9rem;
@@ -353,7 +436,7 @@ iframe {
   display: block;
 }
 
-/* ===== 评分卡片（等边三角形布局） ===== */
+/* ===== 评分卡片（等边三角形 + 内部评分叠加） ===== */
 .score-box {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -376,42 +459,64 @@ iframe {
   gap: 2.5rem;
   flex-wrap: wrap;
 }
+
 .score-triangle {
   position: relative;
-  width: 260px;
-  height: 230px;
+  width: 380px;
+  height: 320px;
   flex-shrink: 0;
 }
 .tri-svg {
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  width: 320px;
+  height: 300px;
   display: block;
+  overflow: visible;
 }
-.tri-point {
+
+.tri-inner {
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tri-label {
   position: absolute;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 2px;
-  transform: translate(-50%, -50%);
   pointer-events: none;
-}
-.tri-top { top: 25%; left: 50%; }
-.tri-bl  { top: 82%; left: 20%; }
-.tri-br  { top: 82%; left: 80%; }
-.tri-label {
-  font-size: 0.7rem;
-  color: var(--text-secondary);
-  font-weight: 500;
   white-space: nowrap;
 }
+.tri-label-top {
+  top: 90px;
+  left: 190px;
+  transform: translate(-50%, -100%) translateY(-4px);
+}
+.tri-label-bl {
+  top: 270px;
+  left: 70px;
+  transform: translate(-50%, 0) translateY(6px);
+}
+.tri-label-br {
+  top: 270px;
+  left: 310px;
+  transform: translate(-50%, 0) translateY(6px);
+}
+.tri-label > span:first-child {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
 .tri-value {
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   font-weight: 800;
   color: var(--text);
   letter-spacing: -0.02em;
   line-height: 1;
 }
+
 .score-total-side {
   display: flex;
   flex-direction: column;
@@ -441,12 +546,15 @@ iframe {
 
 @media (max-width: 520px) {
   .score-layout { gap: 1.5rem; }
-  .score-triangle { width: 220px; height: 195px; }
-  .tri-value { font-size: 1.1rem; }
+  .score-triangle { width: 320px; height: 280px; }
+  .tri-svg { top: 20px; left: 20px; width: 280px; height: 260px; }
+  .tri-label-top { top: 72px; left: 160px; }
+  .tri-label-bl { top: 240px; left: 60px; }
+  .tri-label-br { top: 240px; left: 260px; }
+  .tri-value { font-size: 1.05rem; }
   .total-value { font-size: 1.6rem; }
   .score-total-side { padding: 1rem 1.25rem; min-width: 90px; }
 }
-
 /* ===== 评分声明卡片 ===== */
 .score-notice {
   margin-top: 2.5rem;
