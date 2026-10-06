@@ -756,3 +756,137 @@ document.addEventListener('DOMContentLoaded', initPreview);
 
 
 
+
+
+
+/* ============================================================
+ *  申请补充弹窗
+ * ============================================================ */
+function initApplyModal() {
+  const modal = document.getElementById('applyModal');
+  const openBtn = document.getElementById('openApplyModal');
+  const closeBtn = document.getElementById('closeApplyModal');
+  const okBtn = document.getElementById('okApplyModal');
+  const sendBtn = document.getElementById('sendApplyMail');
+  const templatePre = document.getElementById('applyTemplate');
+  const subjectCode = document.querySelector('.apply-subject-code');
+
+  if (!modal || !openBtn) return;
+
+  const RECIPIENT = 'wu__20111229@outlook.com';
+  const OPEN_MS = 1150;
+  const CLOSE_MS = 850;
+
+  const getLang = () => {
+    try { return localStorage.getItem('preferred-lang') || 'zh'; } catch(e){ return 'zh'; }
+  };
+
+  const t = (key, fallback) => {
+    const lang = getLang();
+    if (typeof translations !== 'undefined' && translations[lang] && translations[lang][key] !== undefined) {
+      return translations[lang][key];
+    }
+    return fallback || '';
+  };
+
+  const refreshTexts = () => {
+    if (templatePre) {
+      templatePre.textContent = t('applyMailBody', '模型提供商：\n模型名称：\nHTML 作品：以附件形式发送\n证明方式：\n生成耗时：');
+    }
+    if (subjectCode) {
+      subjectCode.textContent = t('applyMailSubject', '申请补充 AI 展区');
+    }
+  };
+
+  let closing = false;
+
+  const open = () => {
+    if (closing) return;
+    refreshTexts();
+
+    modal.classList.remove('closing');
+    modal.classList.remove('opening');
+    modal.classList.remove('backdrop-show');
+    // 强制 reflow
+    void modal.offsetWidth;
+    modal.classList.add('opening');
+
+    if (typeof modal.showModal === 'function') {
+      modal.showModal();
+    } else {
+      modal.setAttribute('open', '');
+    }
+
+    // 等两帧让浏览器先渲染出透明 backdrop，再切到不透明 → 触发线性过渡
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        modal.classList.add('backdrop-show');
+      });
+    });
+
+    setTimeout(() => modal.classList.remove('opening'), OPEN_MS);
+  };
+
+  const close = () => {
+    if (closing) return;
+    closing = true;
+
+    modal.classList.remove('opening');
+    modal.classList.add('closing');
+    modal.classList.remove('backdrop-show');   // 触发 backdrop 淡出
+
+    setTimeout(() => {
+      modal.classList.remove('closing');
+      if (typeof modal.close === 'function') {
+        modal.close();
+      } else {
+        modal.removeAttribute('open');
+      }
+      closing = false;
+    }, CLOSE_MS);
+  };
+
+  const send = () => {
+    const subject = t('applyMailSubject', '申请补充 AI 展区');
+    const body = t('applyMailBody', '模型提供商：\n模型名称：\nHTML 作品：以附件形式发送\n证明方式：\n生成耗时：');
+    const mailto = 'mailto:' + RECIPIENT +
+      '?subject=' + encodeURIComponent(subject) +
+      '&body=' + encodeURIComponent(body);
+    window.location.href = mailto;
+  };
+
+  openBtn.addEventListener('click', open);
+  closeBtn?.addEventListener('click', close);
+  okBtn?.addEventListener('click', close);
+  sendBtn?.addEventListener('click', send);
+
+  // 点遮罩关闭
+  modal.addEventListener('click', (e) => {
+    const rect = modal.getBoundingClientRect();
+    const inDialog =
+      e.clientX >= rect.left && e.clientX <= rect.right &&
+      e.clientY >= rect.top && e.clientY <= rect.bottom;
+    if (!inDialog) close();
+  });
+
+  // Esc 关闭也走动画
+  modal.addEventListener('cancel', (e) => {
+    e.preventDefault();
+    close();
+  });
+
+  // 语言切换时同步文本
+  const langSwitch = document.getElementById('langSwitch');
+  if (langSwitch) {
+    langSwitch.addEventListener('click', () => {
+      setTimeout(refreshTexts, 50);
+    });
+  }
+}
+
+document.addEventListener('DOMContentLoaded', initApplyModal);
+
+
+
+
+

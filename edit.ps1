@@ -1,6 +1,8 @@
 #Requires -Version 5.0
 # ============================================================
-#  重画 favicon v2：参照骑车作品里的鹈鹕比例
+#  修复 backdrop 线性过渡
+#   - CSS：backdrop 用 .backdrop-show 类控制不透明
+#   - JS：showModal 后延迟两帧再加类，触发 transition
 # ============================================================
 
 $ErrorActionPreference = "Stop"
@@ -11,85 +13,200 @@ if (-not (Test-Path $root)) {
     Read-Host "按回车退出"; exit 1
 }
 
-Write-Host "`n=== 重画鹈鹕 favicon v2 ===`n" -ForegroundColor Cyan
+Write-Host "`n=== 修复 backdrop 线性过渡 ===`n" -ForegroundColor Cyan
 
-$faviconSvg = @'
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#6366f1"/>
-      <stop offset="100%" stop-color="#7c3aed"/>
-    </linearGradient>
-    <linearGradient id="beakTop" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#fbbf24"/>
-      <stop offset="100%" stop-color="#f59e0b"/>
-    </linearGradient>
-    <linearGradient id="pouch" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#fef08a"/>
-      <stop offset="55%" stop-color="#fde047"/>
-      <stop offset="100%" stop-color="#f59e0b"/>
-    </linearGradient>
-  </defs>
+# ────────────────────────────────────────────────────────────
+#  1. style.css：替换 ::backdrop 相关规则
+# ────────────────────────────────────────────────────────────
+$cssPath = "$root\assets\style.css"
+$css = Get-Content $cssPath -Raw -Encoding UTF8
 
-  <!-- 圆角方形渐变底 -->
-  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+# 删掉所有旧的 backdrop 规则
+$oldBackdrops = @(
+    'dialog\.apply-modal\[open\]::backdrop\s*\{[^}]*\}',
+    'dialog\.apply-modal\.closing::backdrop\s*\{[^}]*\}',
+    'dialog\.apply-modal::backdrop\s*\{[^}]*\}',
+    'dialog\.apply-modal\.backdrop-show::backdrop\s*\{[^}]*\}'
+)
+foreach ($p in $oldBackdrops) {
+    $css = [regex]::Replace($css, $p, '')
+}
 
-  <!-- 身体（左下） -->
-  <ellipse cx="165" cy="365" rx="105" ry="90" fill="#ffffff"/>
-
-  <!-- 脖子：从身体连到头 -->
-  <path d="M 180 310 Q 190 220 255 178 L 315 202 Q 255 250 265 375 Z"
-        fill="#ffffff"/>
-
-  <!-- 头 -->
-  <circle cx="265" cy="180" r="55" fill="#ffffff"/>
-
-  <!-- 头顶呆毛 -->
-  <path d="M 240 130 Q 245 95 288 88 Q 258 108 258 132 Z"
-        fill="#ffffff"/>
-
-  <!-- 眼睛 -->
-  <circle cx="295" cy="168" r="8.5" fill="#1e293b"/>
-  <circle cx="298" cy="165" r="2.8" fill="#ffffff"/>
-
-  <!-- 上喙：从头部右侧长条延伸，末端略下弯 -->
-  <path d="M 315 165
-           C 380 158 430 165 482 177
-           Q 486 181 482 185
-           L 315 196
-           Z"
-        fill="url(#beakTop)"/>
-  <!-- 喙尖小钩 -->
-  <path d="M 482 185 Q 486 192 478 196"
-        stroke="#d97706" stroke-width="3" stroke-linecap="round"
-        fill="none"/>
-
-  <!-- 喉囊：从喙下方大幅下垂 -->
-  <path d="M 315 196
-           C 380 192 430 188 482 185
-           Q 472 250 425 288
-           Q 380 315 335 300
-           Q 300 285 308 230
-           Q 312 210 315 196 Z"
-        fill="url(#pouch)"/>
-
-  <!-- 喉囊内壁褶皱纹路 -->
-  <path d="M 325 220 Q 380 218 440 212"
-        stroke="#d97706" stroke-width="2" fill="none" opacity="0.4"/>
-  <path d="M 322 248 Q 380 248 445 232"
-        stroke="#d97706" stroke-width="2" fill="none" opacity="0.32"/>
-</svg>
+$newBackdrop = @'
+/* --- backdrop：用 .backdrop-show 类触发过渡 --- */
+dialog.apply-modal::backdrop {
+  background: rgba(15, 23, 42, 0);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  transition: background 0.4s linear, backdrop-filter 0.4s linear;
+}
+dialog.apply-modal.backdrop-show::backdrop {
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+/* Chrome 117+ 支持 @starting-style，可以省去 JS 那一帧延迟 */
+@starting-style {
+  dialog.apply-modal.backdrop-show::backdrop {
+    background: rgba(15, 23, 42, 0);
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+  }
+}
 '@
 
-$faviconPath = "$root\assets\favicon.svg"
-Set-Content -Path $faviconPath -Value $faviconSvg -Encoding UTF8
-Write-Host "✓ 已重画 assets/favicon.svg（v2）" -ForegroundColor Green
+# 找 dialog.apply-modal 段落后插回去（用 /* --- backdrop 注释或 dialog.apply-modal.closing 之后）
+if ($css -match 'dialog\.apply-modal\.closing\s*\{') {
+    $css = [regex]::Replace($css, '(dialog\.apply-modal\.closing\s*\{[^}]*\})', ('$1' + "`r`n`r`n" + $newBackdrop), 1)
+} elseif ($css -match 'dialog\.apply-modal\.opening\s*\{') {
+    $css = [regex]::Replace($css, '(dialog\.apply-modal\.opening\s*\{[^}]*\})', ('$1' + "`r`n`r`n" + $newBackdrop), 1)
+} else {
+    # 兜底：追加到文件末尾
+    $css = $css.TrimEnd() + "`r`n`r`n" + $newBackdrop + "`r`n"
+}
 
+Set-Content -Path $cssPath -Value $css -Encoding UTF8
+Write-Host "✓ style.css backdrop 已改为 .backdrop-show 控制" -ForegroundColor Green
+
+# ────────────────────────────────────────────────────────────
+#  2. i18n.js：改 open / close 加 rAF 延迟
+# ────────────────────────────────────────────────────────────
+$i18nPath = "$root\assets\i18n.js"
+$i18n = Get-Content $i18nPath -Raw -Encoding UTF8
+
+$oldOpen = @'
+  const open = () => {
+    if (closing) return;
+    refreshTexts();
+
+    modal.classList.remove('closing');
+    modal.classList.remove('opening');
+    // 强制 reflow，让动画能重播
+    void modal.offsetWidth;
+    modal.classList.add('opening');
+
+    if (typeof modal.showModal === 'function') {
+      modal.showModal();
+    } else {
+      modal.setAttribute('open', '');
+    }
+
+    setTimeout(() => modal.classList.remove('opening'), OPEN_MS);
+  };
+'@
+
+$newOpen = @'
+  const open = () => {
+    if (closing) return;
+    refreshTexts();
+
+    modal.classList.remove('closing');
+    modal.classList.remove('opening');
+    modal.classList.remove('backdrop-show');
+    // 强制 reflow
+    void modal.offsetWidth;
+    modal.classList.add('opening');
+
+    if (typeof modal.showModal === 'function') {
+      modal.showModal();
+    } else {
+      modal.setAttribute('open', '');
+    }
+
+    // 等两帧让浏览器先渲染出透明 backdrop，再切到不透明 → 触发线性过渡
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        modal.classList.add('backdrop-show');
+      });
+    });
+
+    setTimeout(() => modal.classList.remove('opening'), OPEN_MS);
+  };
+'@
+
+$oldClose = @'
+  const close = () => {
+    if (closing) return;
+    closing = true;
+
+    modal.classList.remove('opening');
+    modal.classList.add('closing');
+
+    setTimeout(() => {
+      modal.classList.remove('closing');
+      if (typeof modal.close === 'function') {
+        modal.close();
+      } else {
+        modal.removeAttribute('open');
+      }
+      closing = false;
+    }, CLOSE_MS);
+  };
+'@
+
+$newClose = @'
+  const close = () => {
+    if (closing) return;
+    closing = true;
+
+    modal.classList.remove('opening');
+    modal.classList.add('closing');
+    modal.classList.remove('backdrop-show');   // 触发 backdrop 淡出
+
+    setTimeout(() => {
+      modal.classList.remove('closing');
+      if (typeof modal.close === 'function') {
+        modal.close();
+      } else {
+        modal.removeAttribute('open');
+      }
+      closing = false;
+    }, CLOSE_MS);
+  };
+'@
+
+$oldOpenLF = $oldOpen -replace "`r`n", "`n"
+$newOpenLF = $newOpen -replace "`r`n", "`n"
+$oldCloseLF = $oldClose -replace "`r`n", "`n"
+$newCloseLF = $newClose -replace "`r`n", "`n"
+
+$i18nLF = $i18n -replace "`r`n", "`n"
+
+$replaced = 0
+if ($i18nLF.Contains($oldOpenLF)) {
+    $i18nLF = $i18nLF.Replace($oldOpenLF, $newOpenLF)
+    $replaced++
+}
+if ($i18nLF.Contains($oldCloseLF)) {
+    $i18nLF = $i18nLF.Replace($oldCloseLF, $newCloseLF)
+    $replaced++
+}
+
+if ($replaced -eq 2) {
+    $i18nFinal = $i18nLF -replace "`n", "`r`n"
+    Set-Content -Path $i18nPath -Value $i18nFinal -Encoding UTF8
+    Write-Host "✓ i18n.js open/close 已加 backdrop-show 逻辑" -ForegroundColor Green
+} elseif ($replaced -eq 1) {
+    Write-Host "⚠ i18n.js 只替换了 1 处，请手动检查另一个函数" -ForegroundColor Yellow
+    $i18nFinal = $i18nLF -replace "`n", "`r`n"
+    Set-Content -Path $i18nPath -Value $i18nFinal -Encoding UTF8
+} else {
+    Write-Host "✗ i18n.js 未匹配到 open/close 函数，请手动修改" -ForegroundColor Yellow
+    Write-Host "  需要在 open() 里 showModal 后加:" -ForegroundColor Yellow
+    Write-Host "    requestAnimationFrame(() => requestAnimationFrame(() => modal.classList.add('backdrop-show')));" -ForegroundColor Yellow
+    Write-Host "  在 close() 里加:" -ForegroundColor Yellow
+    Write-Host "    modal.classList.remove('backdrop-show');" -ForegroundColor Yellow
+}
+
+Write-Host ""
+Write-Host "════════════════════════════════════════════" -ForegroundColor Cyan
+Write-Host "  完成！" -ForegroundColor Cyan
+Write-Host "════════════════════════════════════════════" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "推送：" -ForegroundColor Yellow
 Write-Host "  cd F:\AIPelican" -ForegroundColor White
 Write-Host "  git add ." -ForegroundColor White
-Write-Host "  git commit -m 'feat: 重画 favicon，参照骑车鹈鹕比例'" -ForegroundColor White
+Write-Host "  git commit -m 'fix: backdrop 使用两帧延迟触发线性过渡'" -ForegroundColor White
 Write-Host "  git push" -ForegroundColor White
 Write-Host ""
 

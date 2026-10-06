@@ -159,6 +159,49 @@ a, button, input, select, textarea { -webkit-tap-highlight-color: transparent; }
       </div>
     </a>
   </section>
+
+  <!-- 申请补充 -->
+  <section class="apply-notice">
+    <p class="apply-text" data-i18n="applyText">没有你支持的 AI？</p>
+    <button type="button" class="apply-btn" id="openApplyModal" data-i18n="applyBtn">去申请 / 补充 →</button>
+  </section>
+
+  <!-- 申请弹窗 -->
+  <dialog class="apply-modal" id="applyModal">
+    <div class="apply-modal-head">
+      <h3 data-i18n="applyModalTitle">申请补充 AI 展区</h3>
+      <button type="button" class="apply-modal-close" id="closeApplyModal" aria-label="关闭">×</button>
+    </div>
+    <div class="apply-modal-body">
+      <ol class="apply-list">
+        <li data-i18n="applyReq1">写清模型提供商（例如 DeepSeek / 阿里通义 / 字节跳动 / 小米）</li>
+        <li data-i18n="applyReq2">写清模型名称（例如 DeepSeek-V4.1-Flash / Qwen3.8Max）</li>
+        <li data-i18n="applyReq3">建议附上该模型写出的 HTML 作品</li>
+        <li data-i18n="applyReq4">如果附上 HTML，必须能证明是该模型写的（截图、对话记录等）</li>
+        <li data-i18n="applyReq5">并注明生成耗时</li>
+      </ol>
+
+      <div class="apply-email">
+        <p class="apply-email-tip">
+          <span data-i18n="applyEmailTip">请将材料发送至：</span>
+          <a href="mailto:wu__20111229@outlook.com" class="apply-email-addr">wu__20111229@outlook.com</a>
+        </p>
+        <p class="apply-subject-tip">
+          <span data-i18n="applySubjectLabel">邮件主题必须为：</span>
+          <code class="apply-subject-code">申请补充 AI 展区</code>
+        </p>
+        <pre class="apply-template" id="applyTemplate">模型提供商：
+模型名称：
+HTML 作品：以附件形式发送
+证明方式：（截图 / 对话记录 / 其他）
+生成耗时：</pre>
+      </div>
+    </div>
+    <div class="apply-modal-foot">
+      <button type="button" class="apply-modal-ok apply-modal-secondary" id="okApplyModal" data-i18n="applyModalClose">知道了</button>
+      <button type="button" class="apply-modal-ok apply-modal-send" id="sendApplyMail" data-i18n="applySend">去发送</button>
+    </div>
+  </dialog>
 </main>
 
 <footer class="footer" data-i18n="footer">纯静态站点 · 用心做鹈鹕</footer>
