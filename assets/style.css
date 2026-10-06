@@ -1813,27 +1813,6 @@ dialog.apply-modal.show-top-glow dialog.apply-modal.show-bottom-glow
  *  弹窗（Wrapper 滚动，弹窗高度=内容）
  * ============================================================ */
 
-.apply-modal-wrapper {
-  position: fixed;
-  inset: 0;
-  z-index: 999;
-  display: none;
-  overflow-y: auto;
-  overflow-x: hidden;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-.apply-modal-wrapper.show {
-  display: block;
-}
-.apply-modal-wrapper::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-  display: none;
-}
-
 .apply-modal-spacer-top { height: 100px; }
 .apply-modal-spacer-bottom { height: 40px; }
 
@@ -2101,7 +2080,6 @@ dialog.apply-modal.opening {
   .apply-modal-ok { padding: 0.55rem 1.25rem; font-size: 0.85rem; }
 }
 
-
 /* ===== 弹窗修复 v10（覆盖式） ===== */
 
 /* 1. 辉光 z-index 高于弹窗 */
@@ -2144,18 +2122,54 @@ dialog.apply-modal {
   }
 }
 
-
-/* ===== 弹窗修复 v12 ===== */
-
-/* wrapper 顶部由 JS 动态设置到顶栏底部 */
+/* ===== 弹窗 wrapper（默认隐藏，居中） ===== */
 .apply-modal-wrapper {
+  display: none;
+  position: fixed;
   top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.apply-modal-wrapper.show {
+  display: flex;
+  flex-direction: column;
+  padding-top: 100px;
+  padding-bottom: 40px;
+  box-sizing: border-box;
+}
+.apply-modal-wrapper::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
 }
 
-.apply-modal-spacer-top {
-  height: 20px !important;
-}
+.apply-modal-spacer-top,
 .apply-modal-spacer-bottom {
-  height: 40px !important;
+  display: none !important;
+}
+
+/* dialog 本身未打开时强制隐藏 */
+dialog.apply-modal:not([open]) {
+  display: none !important;
+}
+
+dialog.apply-modal {
+  margin: auto;
+  flex-shrink: 0;
+}
+
+@media (max-width: 520px) {
+  .apply-modal-wrapper.show {
+    padding-top: 80px;
+    padding-bottom: 24px;
+  }
 }
 
