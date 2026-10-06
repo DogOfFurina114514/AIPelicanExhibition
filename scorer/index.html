@@ -1,66 +1,12 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-lang="zh">
 <head>
-<style>
-/* 滚动条隐藏 + 禁 tap 高亮（内联保险） */
-html { scrollbar-width: none; -ms-overflow-style: none; }
-html::-webkit-scrollbar, body::-webkit-scrollbar { width:0; height:0; display:none; }
-* { -webkit-tap-highlight-color: transparent; }
-a, button, input, select, textarea { -webkit-tap-highlight-color: transparent; }
-</style>
-<script>
-/* 站内跳转：源页面滚动过 → 首帧收缩 → 立即平滑展开（v7） */
-(function(){
-  var KEY = 'aip_prev_scrolled';
-
-  function playFromInternal(){
-    var html = document.documentElement;
-    html.classList.add('from-internal');
-
-    // 双 rAF：先让浏览器渲染收缩首帧，再移除类触发 transition 展开
-    requestAnimationFrame(function(){
-      requestAnimationFrame(function(){
-        html.classList.remove('from-internal');
-        if (window.scrollY > 20) {
-          var topbar = document.querySelector('.topbar');
-          if (topbar) topbar.classList.add('scrolled');
-        }
-      });
-    });
-  }
-
-  // 1. 读上次滚动状态，决定是否播放动画
-  try {
-    var perf = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
-    var navType = perf ? perf.type : 'navigate';
-    if (navType !== 'reload') {
-      var prevScrolled = sessionStorage.getItem(KEY) === '1';
-      if (prevScrolled) playFromInternal();
-    }
-  } catch(e){}
-
-  // 2. 当前页面刚加载，重置为 '0'
-  try { sessionStorage.setItem(KEY, '0'); } catch(e){}
-
-  // 3. 实时监听滚动，更新状态
-  var ticking = false;
-  window.addEventListener('scroll', function(){
-    if (ticking) return;
-    ticking = true;
-    window.requestAnimationFrame(function(){
-      try {
-        sessionStorage.setItem(KEY, window.scrollY > 20 ? '1' : '0');
-      } catch(e){}
-      ticking = false;
-    });
-  }, { passive: true });
-})();
-</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>AI 鹈鹕作品评分器</title>
 <meta name="description" content="自动分析 HTML 作品的美观性、简洁度、功能性。">
-<link rel="stylesheet" href="../assets/style.css">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="stylesheet" href="../assets/style.css?v=202610061">
 <style>
   /* ---- 该页专属样式 ---- */
   .dim-grid {
@@ -116,7 +62,6 @@ a, button, input, select, textarea { -webkit-tap-highlight-color: transparent; }
     top: 0.45rem;
   }
 
-  /* ---- 下载卡片 ---- */
   .download-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -157,7 +102,6 @@ a, button, input, select, textarea { -webkit-tap-highlight-color: transparent; }
     color: var(--text-secondary);
   }
 
-  /* ---- 使用步骤 ---- */
   .usage-list {
     list-style: none;
     counter-reset: step;
@@ -194,7 +138,6 @@ a, button, input, select, textarea { -webkit-tap-highlight-color: transparent; }
     justify-content: center;
   }
 
-  /* ---- 代码块 ---- */
   .code-block {
     background: #1e293b;
     color: #e2e8f0;
@@ -212,7 +155,6 @@ a, button, input, select, textarea { -webkit-tap-highlight-color: transparent; }
     font-family: inherit;
   }
 
-  /* ---- 章节 ---- */
   .section-block {
     margin-bottom: 3rem;
   }
@@ -231,7 +173,6 @@ a, button, input, select, textarea { -webkit-tap-highlight-color: transparent; }
     max-width: 720px;
   }
 </style>
-  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 </head>
 <body>
 
@@ -258,20 +199,14 @@ a, button, input, select, textarea { -webkit-tap-highlight-color: transparent; }
     <p class="hero-sub" data-i18n="scorerSub">一个可以拖入 HTML 文件、自动分析美观性/简洁度/功能性的桌面小工具。</p>
   </section>
 
-  <!-- 这是什么 -->
   <div class="section-block">
     <h2 data-i18n="whatTitle">这是什么？</h2>
-    <p data-i18n="whatBody">
-      这是本站用于给每个 AI 生成的网页作品打分的工具。它不会「看」作品长什么样，而是通过分析 HTML 源码里的结构、样式、脚本，按照三个维度给出一组客观分数。所有作品页面上展示的评分，都是由这个程序生成的。
-    </p>
+    <p data-i18n="whatBody">这是本站用于给每个 AI 生成的网页作品打分的工具。它不会「看」作品长什么样，而是通过分析 HTML 源码里的结构、样式、脚本，按照三个维度给出一组客观分数。所有作品页面上展示的评分，都是由这个程序生成的。</p>
   </div>
 
-  <!-- 运作方式 -->
   <div class="section-block">
     <h2 data-i18n="howTitle">它是怎么打分的</h2>
-    <p data-i18n="howBody">
-      程序读取 HTML 源码后，从三个独立维度逐项检查。每个维度满分 10 分，最终总分是三个维度的平均值，保留一位小数。
-    </p>
+    <p data-i18n="howBody">程序读取 HTML 源码后，从三个独立维度逐项检查。每个维度满分 10 分，最终总分是三个维度的平均值，保留一位小数。</p>
 
     <div class="dim-grid">
       <div class="dim-card">
@@ -314,7 +249,6 @@ a, button, input, select, textarea { -webkit-tap-highlight-color: transparent; }
     </div>
   </div>
 
-  <!-- 下载 -->
   <div class="section-block">
     <h2 data-i18n="downloadTitle">下载</h2>
     <p data-i18n="downloadBody">两种方式任选其一：如果你装过 Python 可以直接跑源码，否则下载 Windows 独立程序双击即用。</p>
@@ -338,19 +272,16 @@ a, button, input, select, textarea { -webkit-tap-highlight-color: transparent; }
     </div>
   </div>
 
-  <!-- 使用说明 -->
   <div class="section-block">
     <h2 data-i18n="usageTitle">使用说明</h2>
-
     <ol class="usage-list">
-      <li data-i18n="usage1">下载 <code>scorer.exe</code> 或 <code>scorer.py</code> 并运行。</li>
-      <li data-i18n="usage2">把任意 <code>.html</code> 文件拖进窗口（或者点右上角按钮选择文件）。</li>
+      <li data-i18n="usage1">下载 scorer.exe 或 scorer.py 并运行。</li>
+      <li data-i18n="usage2">把任意 .html 文件拖进窗口（或者点右上角按钮选择文件）。</li>
       <li data-i18n="usage3">程序会立刻分析并显示三个维度的评分和总分。</li>
       <li data-i18n="usage4">每个维度下方会逐条列出加分/扣分的具体项，一眼看出分是怎么来的。</li>
     </ol>
   </div>
 
-  <!-- 自己打包 -->
   <div class="section-block">
     <h2 data-i18n="buildTitle">自己打包（可选）</h2>
     <p data-i18n="buildBody">如果你想自己从源码构建 Windows 独立程序，用 PyInstaller 一条命令即可。</p>
@@ -361,17 +292,17 @@ cd scorer
 pyinstaller --onefile --windowed --name scorer --clean --noconfirm scorer.py</code>
     </div>
   </div>
-
 </main>
 
-<footer class="footer">
-  <div class="footer-text" data-i18n="footer">纯静态站点 · 用心做鹈鹕</div>
+<footer class="footer" id="scorerFooter">
+  <div class="footer-text" id="scorerFooterText">采用 AGPL v3.0 协议开源
+Under the GNU Affero General Public License v3.0</div>
   <img src="../assets/agplv3.svg" alt="AGPL v3.0" class="footer-icon">
 </footer>
 
 <script>
 /* ============================================================
- * scorer 页面独立翻译（不依赖主站 i18n.js）
+ *  scorer 页面独立翻译
  * ============================================================ */
 const scorerI18n = {
   zh: {
@@ -422,9 +353,7 @@ const scorerI18n = {
     usage4: "每个维度下方会逐条列出加分/扣分的具体项，一眼看出分是怎么来的。",
 
     buildTitle: "自己打包（可选）",
-    buildBody: "如果你想自己从源码构建 Windows 独立程序，用 PyInstaller 一条命令即可。",
-
-    footer: "纯静态站点 · 用心做鹈鹕"
+    buildBody: "如果你想自己从源码构建 Windows 独立程序，用 PyInstaller 一条命令即可。"
   },
   en: {
     brand: "AI Pelican Exhibition",
@@ -474,9 +403,7 @@ const scorerI18n = {
     usage4: "Each dimension lists every bonus/penalty item, so you can see exactly how the score was formed.",
 
     buildTitle: "Build it yourself (optional)",
-    buildBody: "If you want to build the Windows binary from source, use PyInstaller with one command.",
-
-    footer: "Pure Static Site · Made with ❤️ for Pelicans"
+    buildBody: "If you want to build the Windows binary from source, use PyInstaller with one command."
   },
   meme: {
     brand: "大肥鱼做的鹈鹕蹲点",
@@ -526,13 +453,11 @@ const scorerI18n = {
     usage4: "每个维度下面还给你列明白哪个加哪个扣，别不服。",
 
     buildTitle: "想自己打包也行",
-    buildBody: "想自己从源码打 Windows 程序，PyInstaller 一条命令搞定。",
-
-    footer: "纯静态站点 · 大肥鱼爱吃鹈鹕"
+    buildBody: "想自己从源码打 Windows 程序，PyInstaller 一条命令搞定。"
   }
 };
 
-function setScorerLang(lang) {
+function applyScorerLang(lang) {
   if (!scorerI18n[lang]) lang = 'zh';
   document.documentElement.dataset.lang = lang;
 
@@ -553,92 +478,17 @@ function setScorerLang(lang) {
 document.addEventListener('DOMContentLoaded', () => {
   let saved = 'zh';
   try { saved = localStorage.getItem('preferred-lang') || 'zh'; } catch (e) {}
-  setScorerLang(saved);
+  applyScorerLang(saved);
 
-  const langSwitch = document.getElementById('langSwitch');
-  if (langSwitch) {
-    langSwitch.addEventListener('click', (e) => {
+  const sw = document.getElementById('langSwitch');
+  if (sw) {
+    sw.addEventListener('click', (e) => {
       const btn = e.target.closest('.lang-btn');
-      if (btn) setScorerLang(btn.dataset.lang);
+      if (btn) applyScorerLang(btn.dataset.lang);
     });
   }
 });
 </script>
 
-
-<script>
-/* ============================================================
- *  scorer 页面专用顶栏滚动逻辑
- *  （scorer 页面没有加载主站 i18n.js，需要独立实现）
- * ============================================================ */
-(function initTopbarForScorer() {
-  function ready(fn) {
-    if (document.readyState !== 'loading') fn();
-    else document.addEventListener('DOMContentLoaded', fn);
-  }
-
-  ready(function () {
-    const topbar = document.querySelector('.topbar');
-    if (!topbar) return;
-
-    const THRESHOLD = 20;
-    let ticking = false;
-    let animating = false;
-    let animationTimer = null;
-
-    const update = () => {
-      if (animating) { ticking = false; return; }
-      if (window.scrollY > THRESHOLD) {
-        topbar.classList.add('scrolled');
-      } else {
-        topbar.classList.remove('scrolled');
-      }
-      ticking = false;
-    };
-
-    const onScroll = () => {
-      if (animating && window.scrollY > THRESHOLD) {
-        animating = false;
-        if (animationTimer) { clearTimeout(animationTimer); animationTimer = null; }
-      }
-      if (!ticking) {
-        window.requestAnimationFrame(update);
-        ticking = true;
-      }
-    };
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-
-    // 站内跳转 → 播放展开动画
-    let fromInternal = false;
-    try {
-      if (document.referrer && document.referrer.indexOf(location.host) !== -1) {
-        fromInternal = true;
-      }
-    } catch (e) {}
-
-    if (fromInternal && window.scrollY <= 5) {
-      if (window.scrollY > 20) {
-        topbar.classList.add('scrolled');
-        animating = false;
-        update();
-      } else {
-        animating = true;
-        topbar.classList.add('scrolled');
-        void topbar.offsetWidth;
-        animationTimer = setTimeout(function(){
-          topbar.classList.remove('scrolled');
-          animationTimer = setTimeout(function(){
-            animating = false;
-            animationTimer = null;
-            update();
-          }, 560);
-        }, 400);
-      }
-    } else {
-      update();
-    }
-  });
-})();
-</script></body>
+</body>
 </html>
