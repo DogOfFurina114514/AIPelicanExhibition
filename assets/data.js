@@ -118,14 +118,14 @@ const workData = {
   // MiMo-V2.6-Pro  —— 对应 MiMo/MiMoV26Pro.html
   mimoPro: {
     time: {
-      zh:   "待补充",
-      en:   "To be filled",
-      meme: "待补充"
+      zh:   "13分钟",
+      en:   "13min",
+      meme: "和Flash真的有区别吗"
     },
     scores: {
-      aesthetics:    0.0,
-      simplicity:    0.0,
-      functionality: 0.0
+      aesthetics:    4.6,
+      simplicity:    7.7,
+      functionality: 0.6
     }
   }
 
