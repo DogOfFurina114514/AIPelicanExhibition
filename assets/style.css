@@ -153,11 +153,12 @@ body {
   z-index: 1;
 }
 .brand-mark {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary), var(--qwen-color));
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
   flex-shrink: 0;
+  display: block;
+  object-fit: contain;
 }
 
 /* ===== 语言切换 ===== */
@@ -883,5 +884,6 @@ a, button, input, select, textarea {
 }
 .pip-notice-icon { font-size: 2.5rem; line-height: 1; }
 .pip-notice-text { letter-spacing: 0.03em; font-weight: 500; }
+
 
 
