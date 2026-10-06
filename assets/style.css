@@ -43,7 +43,7 @@ body {
 .topbar {
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 1000;
   padding: 0.9rem 2rem;
   background: transparent;
   transition: padding 0.45s cubic-bezier(0.4, 0, 0.2, 1);
@@ -915,8 +915,6 @@ a, button, input, select, textarea {
   color: var(--primary-hover, #4338ca);
 }
 
-/* ===== 弹窗（飞出动画为原创，打开用 reverse 倒放） ===== */
-
 /* ============ 原创关键帧：飞出 ============
    从居中位置往下沉一小段蓄力（easeInBack），然后加速冲出屏幕顶部 */
 
@@ -931,73 +929,695 @@ a, button, input, select, textarea {
  * ============================================================ */
 
 /* --- 基础 --- */
-dialog.apply-modal {
-  position: fixed;
-  inset: 0;
-  margin: auto;
-  width: calc(100% - 2rem);
-  max-width: 520px;
-  height: fit-content;
-  max-height: calc(100vh - 2rem);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface);
-  color: var(--text);
-  padding: 0;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
-  font-family: inherit;
-  overflow: auto;
-  transform: none;
-  opacity: 1;
-}
 
 /* --- 原创关键帧：飞出 --- */
-@keyframes apply-modal-fly-out {
-  0% {
-    transform: translateY(0);
-    animation-timing-function: cubic-bezier(0.5, 0, 0.75, 0);
-  }
-  22% {
-    transform: translateY(36px);
-    animation-timing-function: cubic-bezier(0.6, -0.28, 0.735, 0.045);
-  }
-  100% {
-    transform: translateY(-110vh);
-  }
-}
-
-dialog.apply-modal.closing {
-  animation: apply-modal-fly-out 0.85s forwards;
-}
 
 /* --- backdrop：用 .backdrop-show 类触发过渡 --- */
-dialog.apply-modal::backdrop {
-  background: rgba(15, 23, 42, 0);
-  backdrop-filter: blur(0px);
-  -webkit-backdrop-filter: blur(0px);
-  transition: background 0.4s linear, backdrop-filter 0.4s linear;
-}
-dialog.apply-modal.backdrop-show::backdrop {
-  background: rgba(15, 23, 42, 0.5);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-}
 /* Chrome 117+ 支持 @starting-style，可以省去 JS 那一帧延迟 */
 @starting-style {
-  dialog.apply-modal.backdrop-show::backdrop {
-    background: rgba(15, 23, 42, 0);
-    backdrop-filter: blur(0px);
-    -webkit-backdrop-filter: blur(0px);
   }
-}
-dialog.apply-modal.opening {
-  animation: apply-modal-fly-out 1.15s reverse;
-}
 
 /* --- backdrop 线性过渡 --- */
 
+/* --- 头部 --- */
+.apply-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+  z-index: 4;
+}
+.apply-modal-head h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+.apply-modal-close {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 0.5rem;
+  border-radius: 6px;
+  transition: var(--transition);
+  font-family: inherit;
+}
+.apply-modal-close:hover {
+  background: var(--bg);
+  color: var(--text);
+}
 
+/* --- 主体 --- */
+.apply-modal-body {
+  padding: 1.25rem 1.5rem;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.apply-modal-body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+.apply-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: apply;
+}
+.apply-list li {
+  counter-increment: apply;
+  position: relative;
+  padding: 0.65rem 0 0.65rem 2.25rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border);
+}
+.apply-list li:last-child {
+  border-bottom: none;
+}
+.apply-list li::before {
+  content: counter(apply);
+  position: absolute;
+  left: 0;
+  top: 0.7rem;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--qwen-color, #7c3aed));
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
+/* --- 邮箱与模板 --- */
+.apply-email {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+.apply-email-tip {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+}
+.apply-email-addr {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+  word-break: break-all;
+}
+.apply-email-addr:hover {
+  text-decoration: underline;
+}
+.apply-subject-tip {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+.apply-subject-code {
+  background: rgba(79, 70, 229, 0.10);
+  color: var(--primary);
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.apply-template {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 0.82rem;
+  line-height: 1.65;
+  color: var(--text);
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0;
+}
+
+/* --- 底部按钮 --- */
+.apply-modal-foot {
+  padding: 1rem 1.5rem 1.25rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  border-top: 1px solid var(--border);
+  position: sticky;
+  bottom: 0;
+  background: var(--surface);
+  z-index: 4;
+}
+.apply-modal-ok {
+  background: linear-gradient(135deg, var(--primary), var(--qwen-color, #7c3aed));
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+.apply-modal-ok:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+.apply-modal-secondary {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+.apply-modal-secondary:hover {
+  background: var(--bg);
+  color: var(--text);
+  transform: none;
+  filter: none;
+}
+.apply-modal-send {
+  background: linear-gradient(135deg, var(--primary), var(--qwen-color, #7c3aed));
+}
+
+@media (max-width: 520px) {
+    .apply-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+  z-index: 4;
+}
+  .apply-modal-body {
+  padding: 1.25rem 1.5rem;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.apply-modal-body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+  .apply-modal-foot {
+  padding: 1rem 1.5rem 1.25rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  border-top: 1px solid var(--border);
+  position: sticky;
+  bottom: 0;
+  background: var(--surface);
+  z-index: 4;
+}
+  .apply-modal-ok { padding: 0.55rem 1.25rem; font-size: 0.85rem; }
+}
+
+/* ===== 自定义遮罩（顶栏不被遮住） ===== */
+
+/* dialog 非模态，需要显式给居中样式 */
+
+body.modal-open {
+  overflow: hidden;
+}
+
+@media (max-width: 520px) {
+  }
+
+/* 未打开时强制隐藏 —— 修复"糊在脸上" */
+
+@media (max-width: 520px) {
+  }
+
+/* ============================================================
+ *  弹窗（固定高度 · 整体滚动 · 上下辉光）
+ * ============================================================ */
+
+/* 内部滚动容器 */
+
+/* 顶部辉光（粘在滚动容器顶部） */
+
+/* 底部辉光（粘在滚动容器底部） */
+
+/* 用父级 class 控制辉光显示 */
+dialog.apply-modal.show-top-glow dialog.apply-modal.show-bottom-glow 
+/* --- 头部 --- */
+.apply-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+  z-index: 4;
+}
+.apply-modal-head h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+.apply-modal-close {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 0.5rem;
+  border-radius: 6px;
+  transition: var(--transition);
+  font-family: inherit;
+}
+.apply-modal-close:hover {
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* --- 主体 --- */
+.apply-modal-body {
+  padding: 1.25rem 1.5rem;
+}
+.apply-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: apply;
+}
+.apply-list li {
+  counter-increment: apply;
+  position: relative;
+  padding: 0.65rem 0 0.65rem 2.25rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border);
+}
+.apply-list li:last-child {
+  border-bottom: none;
+}
+.apply-list li::before {
+  content: counter(apply);
+  position: absolute;
+  left: 0;
+  top: 0.7rem;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--qwen-color, #7c3aed));
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- 邮箱与模板 --- */
+.apply-email {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+.apply-email-tip {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+}
+.apply-email-addr {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+  word-break: break-all;
+}
+.apply-email-addr:hover {
+  text-decoration: underline;
+}
+.apply-subject-tip {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+.apply-subject-code {
+  background: rgba(79, 70, 229, 0.10);
+  color: var(--primary);
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.apply-template {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 0.82rem;
+  line-height: 1.65;
+  color: var(--text);
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0;
+}
+
+/* --- 底部按钮 --- */
+.apply-modal-foot {
+  padding: 1rem 1.5rem 1.25rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  border-top: 1px solid var(--border);
+  position: sticky;
+  bottom: 0;
+  background: var(--surface);
+  z-index: 4;
+}
+.apply-modal-ok {
+  background: linear-gradient(135deg, var(--primary), var(--qwen-color, #7c3aed));
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+.apply-modal-ok:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+.apply-modal-secondary {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+.apply-modal-secondary:hover {
+  background: var(--bg);
+  color: var(--text);
+  transform: none;
+  filter: none;
+}
+.apply-modal-send {
+  background: linear-gradient(135deg, var(--primary), var(--qwen-color, #7c3aed));
+}
+
+/* --- 开合动画 --- */
+
+/* --- 自定义遮罩 --- */
+
+/* --- 移动端 --- */
+@media (max-width: 520px) {
+    .apply-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+  z-index: 4;
+}
+  .apply-modal-body { padding: 1rem 1.25rem; }
+  .apply-modal-foot {
+  padding: 1rem 1.5rem 1.25rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  border-top: 1px solid var(--border);
+  position: sticky;
+  bottom: 0;
+  background: var(--surface);
+  z-index: 4;
+}
+  .apply-modal-ok { padding: 0.55rem 1.25rem; font-size: 0.85rem; }
+}
+
+/* ============================================================
+ *  弹窗（卡片边缘辉光）
+ * ============================================================ */
+
+/* 顶/底辉光：贴在卡片边缘的伪元素 */
+/* dialog 本身是滚动容器，伪元素随内容滚动，所以用 scroll-driven 效果 */
+/* 更稳的做法：用 JS 控制 class，伪元素 position: sticky */
+
+/* --- 头部 --- */
+.apply-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+  z-index: 4;
+}
+.apply-modal-head h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+.apply-modal-close {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 0.5rem;
+  border-radius: 6px;
+  transition: var(--transition);
+  font-family: inherit;
+}
+.apply-modal-close:hover {
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* --- 主体 --- */
+.apply-modal-body {
+  padding: 1.25rem 1.5rem;
+}
+.apply-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: apply;
+}
+.apply-list li {
+  counter-increment: apply;
+  position: relative;
+  padding: 0.65rem 0 0.65rem 2.25rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border);
+}
+.apply-list li:last-child {
+  border-bottom: none;
+}
+.apply-list li::before {
+  content: counter(apply);
+  position: absolute;
+  left: 0;
+  top: 0.7rem;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--qwen-color, #7c3aed));
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- 邮箱与模板 --- */
+.apply-email {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+.apply-email-tip {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+}
+.apply-email-addr {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+  word-break: break-all;
+}
+.apply-email-addr:hover {
+  text-decoration: underline;
+}
+.apply-subject-tip {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+.apply-subject-code {
+  background: rgba(79, 70, 229, 0.10);
+  color: var(--primary);
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.apply-template {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 0.82rem;
+  line-height: 1.65;
+  color: var(--text);
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0;
+}
+
+/* --- 底部按钮 --- */
+.apply-modal-foot {
+  padding: 1rem 1.5rem 1.25rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  border-top: 1px solid var(--border);
+  position: sticky;
+  bottom: 0;
+  background: var(--surface);
+  z-index: 4;
+}
+.apply-modal-ok {
+  background: linear-gradient(135deg, var(--primary), var(--qwen-color, #7c3aed));
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+.apply-modal-ok:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+.apply-modal-secondary {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+.apply-modal-secondary:hover {
+  background: var(--bg);
+  color: var(--text);
+  transform: none;
+  filter: none;
+}
+.apply-modal-send {
+  background: linear-gradient(135deg, var(--primary), var(--qwen-color, #7c3aed));
+}
+
+/* --- 开合动画 --- */
+
+/* --- 自定义遮罩 --- */
+.apply-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s linear, backdrop-filter 0.4s linear;
+}
+.apply-mask.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* --- 移动端 --- */
+@media (max-width: 520px) {
+    .apply-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+  z-index: 4;
+}
+  .apply-modal-body { padding: 1rem 1.25rem; }
+  .apply-modal-foot {
+  padding: 1rem 1.5rem 1.25rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  border-top: 1px solid var(--border);
+  position: sticky;
+  bottom: 0;
+  background: var(--surface);
+  z-index: 4;
+}
+  .apply-modal-ok { padding: 0.55rem 1.25rem; font-size: 0.85rem; }
+}
+
+/* ===== 弹窗滚动辉光（页面级） ===== */
+
+/* ============================================================
+ *  弹窗（固定高度 · 紫色页面辉光）
+ * ============================================================ */
 
 /* --- 头部 --- */
 .apply-modal-head {
@@ -1161,12 +1781,381 @@ dialog.apply-modal.opening {
   background: linear-gradient(135deg, var(--primary), var(--qwen-color, #7c3aed));
 }
 
+/* --- 开合动画 --- */
+
+/* --- 遮罩 --- */
+.apply-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s linear, backdrop-filter 0.4s linear;
+}
+.apply-mask.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ===== 页面级紫色辉光 ===== */
+
 @media (max-width: 520px) {
-  dialog.apply-modal { width: calc(100% - 1rem); }
+    .apply-modal-head { padding: 1rem 1.25rem; }
+  .apply-modal-body { padding: 1rem 1.25rem; }
+  .apply-modal-foot { padding: 0.85rem 1.25rem 1rem; flex-wrap: wrap; }
+  .apply-modal-ok { padding: 0.55rem 1.25rem; font-size: 0.85rem; }
+}
+
+/* ============================================================
+ *  弹窗（Wrapper 滚动，弹窗高度=内容）
+ * ============================================================ */
+
+.apply-modal-wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: none;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.apply-modal-wrapper.show {
+  display: block;
+}
+.apply-modal-wrapper::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+.apply-modal-spacer-top { height: 100px; }
+.apply-modal-spacer-bottom { height: 40px; }
+
+/* dialog 只作为容器，高度 = 内容 */
+dialog.apply-modal {
+  position: static !important;
+  display: block;
+  margin: 0 auto;
+  width: calc(100% - 2rem);
+  max-width: 520px;
+  height: auto;
+  max-height: none;
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  padding: 0;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+  font-family: inherit;
+  overflow: visible;
+}
+
+/* --- 头部 --- */
+.apply-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.apply-modal-head h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+.apply-modal-close {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 0.5rem;
+  border-radius: 6px;
+  transition: var(--transition);
+  font-family: inherit;
+}
+.apply-modal-close:hover {
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* --- 主体 --- */
+.apply-modal-body {
+  padding: 1.25rem 1.5rem;
+}
+.apply-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: apply;
+}
+.apply-list li {
+  counter-increment: apply;
+  position: relative;
+  padding: 0.65rem 0 0.65rem 2.25rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border);
+}
+.apply-list li:last-child {
+  border-bottom: none;
+}
+.apply-list li::before {
+  content: counter(apply);
+  position: absolute;
+  left: 0;
+  top: 0.7rem;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--qwen-color, #7c3aed));
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- 邮箱与模板 --- */
+.apply-email {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+.apply-email-tip {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+}
+.apply-email-addr {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+  word-break: break-all;
+}
+.apply-email-addr:hover {
+  text-decoration: underline;
+}
+.apply-subject-tip {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+.apply-subject-code {
+  background: rgba(79, 70, 229, 0.10);
+  color: var(--primary);
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.apply-template {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 0.82rem;
+  line-height: 1.65;
+  color: var(--text);
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0;
+}
+
+/* --- 底部按钮 --- */
+.apply-modal-foot {
+  padding: 1rem 1.5rem 1.25rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  border-top: 1px solid var(--border);
+}
+.apply-modal-ok {
+  background: linear-gradient(135deg, var(--primary), var(--qwen-color, #7c3aed));
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+.apply-modal-ok:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+.apply-modal-secondary {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+.apply-modal-secondary:hover {
+  background: var(--bg);
+  color: var(--text);
+  transform: none;
+  filter: none;
+}
+.apply-modal-send {
+  background: linear-gradient(135deg, var(--primary), var(--qwen-color, #7c3aed));
+}
+
+/* --- 开合动画 --- */
+@keyframes apply-modal-fly-out {
+  0% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0.5, 0, 0.75, 0);
+  }
+  22% {
+    transform: translateY(36px);
+    animation-timing-function: cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  }
+  100% {
+    transform: translateY(-110vh);
+  }
+}
+dialog.apply-modal.closing {
+  animation: apply-modal-fly-out 0.85s forwards;
+}
+dialog.apply-modal.opening {
+  animation: apply-modal-fly-out 1.15s reverse;
+}
+
+/* --- 遮罩 --- */
+.apply-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s linear, backdrop-filter 0.4s linear;
+}
+.apply-mask.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ===== 页面级紫色辉光 ===== */
+.modal-page-glow {
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: 24px;
+  pointer-events: none;
+  z-index: 950;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.modal-page-glow.top {
+  background: linear-gradient(
+    to bottom,
+    rgba(124, 58, 237, 0.55) 0%,
+    rgba(124, 58, 237, 0.18) 55%,
+    transparent 100%
+  );
+}
+.modal-page-glow.bottom {
+  bottom: 0;
+  background: linear-gradient(
+    to top,
+    rgba(124, 58, 237, 0.55) 0%,
+    rgba(124, 58, 237, 0.18) 55%,
+    transparent 100%
+  );
+}
+.modal-page-glow.show {
+  opacity: 1;
+}
+
+@media (max-width: 520px) {
+  .apply-modal-spacer-top { height: 80px; }
+  .apply-modal-spacer-bottom { height: 24px; }
+  dialog.apply-modal {
+    width: calc(100% - 1rem);
+  }
   .apply-modal-head { padding: 1rem 1.25rem; }
   .apply-modal-body { padding: 1rem 1.25rem; }
   .apply-modal-foot { padding: 0.85rem 1.25rem 1rem; flex-wrap: wrap; }
   .apply-modal-ok { padding: 0.55rem 1.25rem; font-size: 0.85rem; }
 }
 
+
+/* ===== 弹窗修复 v10（覆盖式） ===== */
+
+/* 1. 辉光 z-index 高于弹窗 */
+.modal-page-glow {
+  z-index: 1001 !important;
+}
+
+/* 2. 辉光宽度 = 弹窗宽度（居中） */
+.modal-page-glow {
+  left: 50% !important;
+  right: auto !important;
+  width: calc(100% - 2rem) !important;
+  max-width: 520px !important;
+  transform: translateX(-50%) !important;
+}
+
+/* 3. dialog 强制圆角 */
+dialog.apply-modal {
+  border-radius: 16px !important;
+  overflow: hidden !important;
+}
+
+.apply-modal-head {
+  position: static !important;
+  border-top-left-radius: 16px !important;
+  border-top-right-radius: 16px !important;
+}
+
+/* 4. foot 强制非 sticky */
+.apply-modal-foot {
+  position: static !important;
+  bottom: auto !important;
+  border-bottom-left-radius: 16px !important;
+  border-bottom-right-radius: 16px !important;
+}
+
+@media (max-width: 520px) {
+  .modal-page-glow {
+    width: calc(100% - 1rem) !important;
+  }
+}
+
+
+/* ===== 弹窗修复 v12 ===== */
+
+/* wrapper 顶部由 JS 动态设置到顶栏底部 */
+.apply-modal-wrapper {
+  top: 0;
+}
+
+.apply-modal-spacer-top {
+  height: 20px !important;
+}
+.apply-modal-spacer-bottom {
+  height: 40px !important;
+}
 
