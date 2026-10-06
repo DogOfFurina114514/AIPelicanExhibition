@@ -749,14 +749,7 @@ body {
 }
 
 /* ===== 页脚 ===== */
-.footer {
-  text-align: center;
-  padding: 1.75rem;
-  color: var(--text-secondary);
-  font-size: 0.85rem;
-  border-top: 1px solid var(--border);
-  margin-top: auto;
-}
+
 
 /* ============================================================
  *  站内跳转首帧收缩态（无 transition）
@@ -2171,5 +2164,32 @@ dialog.apply-modal {
     padding-top: 80px;
     padding-bottom: 24px;
   }
+}
+
+
+/* ===== footer（文字 + AGPL 图标） ===== */
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2rem 1.75rem 1.5rem;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  border-top: 1px solid var(--border);
+  margin-top: auto;
+}
+.footer-text {
+  white-space: pre-line;
+  line-height: 1.6;
+}
+.footer-icon {
+  display: block;
+  margin-top: 1.25rem;
+  width: 50%;
+  max-width: 200px;
+  min-width: 90px;
+  height: auto;
+  opacity: 0.9;
 }
 
