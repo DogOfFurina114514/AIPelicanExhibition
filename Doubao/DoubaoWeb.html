@@ -1,6 +1,57 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-lang="zh">
 <head>
+<style>
+/* 滚动条隐藏 + 禁 tap 高亮（内联保险） */
+html { scrollbar-width: none; -ms-overflow-style: none; }
+html::-webkit-scrollbar, body::-webkit-scrollbar { width:0; height:0; display:none; }
+* { -webkit-tap-highlight-color: transparent; }
+a, button, input, select, textarea { -webkit-tap-highlight-color: transparent; }
+</style>
+<script>
+/* 站内跳转：源页面滚动过才播放收缩→展开（v6） */
+(function(){
+  var KEY = 'aip_prev_scrolled';
+  var DELAY = 1200;
+
+  function playFromInternal(){
+    document.documentElement.classList.add('from-internal');
+    setTimeout(function(){
+      document.documentElement.classList.remove('from-internal');
+      if (window.scrollY > 20) {
+        var topbar = document.querySelector('.topbar');
+        if (topbar) topbar.classList.add('scrolled');
+      }
+    }, DELAY);
+  }
+
+  // 1. 读上次滚动状态，决定是否播放动画
+  try {
+    var perf = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+    var navType = perf ? perf.type : 'navigate';
+    if (navType !== 'reload') {
+      var prevScrolled = sessionStorage.getItem(KEY) === '1';
+      if (prevScrolled) playFromInternal();
+    }
+  } catch(e){}
+
+  // 2. 当前页面刚加载，还没滚动 → 立即重置为 '0'
+  try { sessionStorage.setItem(KEY, '0'); } catch(e){}
+
+  // 3. 实时监听滚动，更新状态
+  var ticking = false;
+  window.addEventListener('scroll', function(){
+    if (ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(function(){
+      try {
+        sessionStorage.setItem(KEY, window.scrollY > 20 ? '1' : '0');
+      } catch(e){}
+      ticking = false;
+    });
+  }, { passive: true });
+})();
+</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>豆包网页对话 - 详情</title>

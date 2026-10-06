@@ -571,3 +571,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderScores();
   applyMonetCardColors();
 });
+
+
+
+
