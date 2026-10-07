@@ -2193,3 +2193,27 @@ dialog.apply-modal {
   opacity: 0.9;
 }
 
+
+/* brightness 提亮：暗紫变亮紫；白色已到上限，保持不变 */
+    filter: brightness(2);
+  }
+}
+
+
+/* ===== AGPL 图标 ===== */
+.footer-icon {
+  display: block;
+  margin: 1.25rem auto 0;
+  width: 50%;
+  max-width: 200px;
+  min-width: 90px;
+  height: auto;
+}
+
+/* 深色模式反色：暗紫 → 亮紫，白色部分保持 */
+@media (prefers-color-scheme: dark) {
+  .footer-icon {
+    filter: brightness(2);
+  }
+}
+
