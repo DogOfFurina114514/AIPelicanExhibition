@@ -750,7 +750,6 @@ body {
 
 /* ===== 页脚 ===== */
 
-
 /* ============================================================
  *  站内跳转首帧收缩态（无 transition）
  *  head 内联脚本会给 <html> 加 from-internal 类
@@ -907,28 +906,6 @@ a, button, input, select, textarea {
   background: rgba(79, 70, 229, 0.08);
   color: var(--primary-hover, #4338ca);
 }
-
-/* ============ 原创关键帧：飞出 ============
-   从居中位置往下沉一小段蓄力（easeInBack），然后加速冲出屏幕顶部 */
-
-/* 关闭：飞出（原创） */
-
-/* 打开：飞出倒放（从屏幕外飞入 → 冲过落点 → 回弹停下） */
-
-/* ============ backdrop：线性过渡 ============ */
-
-/* ============================================================
- *  弹窗（COMPLETE）
- * ============================================================ */
-
-/* --- 基础 --- */
-
-/* --- 原创关键帧：飞出 --- */
-
-/* --- backdrop：用 .backdrop-show 类触发过渡 --- */
-/* Chrome 117+ 支持 @starting-style，可以省去 JS 那一帧延迟 */
-@starting-style {
-  }
 
 /* --- backdrop 线性过渡 --- */
 
@@ -1159,14 +1136,6 @@ body.modal-open {
   overflow: hidden;
 }
 
-@media (max-width: 520px) {
-  }
-
-/* 未打开时强制隐藏 —— 修复"糊在脸上" */
-
-@media (max-width: 520px) {
-  }
-
 /* ============================================================
  *  弹窗（固定高度 · 整体滚动 · 上下辉光）
  * ============================================================ */
@@ -1178,7 +1147,7 @@ body.modal-open {
 /* 底部辉光（粘在滚动容器底部） */
 
 /* 用父级 class 控制辉光显示 */
-dialog.apply-modal.show-top-glow dialog.apply-modal.show-bottom-glow 
+
 /* --- 头部 --- */
 .apply-modal-head {
   display: flex;
@@ -1814,8 +1783,7 @@ dialog.apply-modal {
   position: static !important;
   display: block;
   margin: 0 auto;
-  width: calc(100% - 2rem);
-  max-width: 520px;
+  
   height: auto;
   max-height: none;
 
@@ -2064,16 +2032,11 @@ dialog.apply-modal.opening {
 @media (max-width: 520px) {
   .apply-modal-spacer-top { height: 80px; }
   .apply-modal-spacer-bottom { height: 24px; }
-  dialog.apply-modal {
-    width: calc(100% - 1rem);
-  }
   .apply-modal-head { padding: 1rem 1.25rem; }
   .apply-modal-body { padding: 1rem 1.25rem; }
   .apply-modal-foot { padding: 0.85rem 1.25rem 1rem; flex-wrap: wrap; }
   .apply-modal-ok { padding: 0.55rem 1.25rem; font-size: 0.85rem; }
 }
-
-/* ===== 弹窗修复 v10（覆盖式） ===== */
 
 /* 1. 辉光 z-index 高于弹窗 */
 .modal-page-glow {
@@ -2084,8 +2047,8 @@ dialog.apply-modal.opening {
 .modal-page-glow {
   left: 50% !important;
   right: auto !important;
-  width: calc(100% - 2rem) !important;
-  max-width: 520px !important;
+  
+  
   transform: translateX(-50%) !important;
 }
 
@@ -2110,39 +2073,9 @@ dialog.apply-modal {
 }
 
 @media (max-width: 520px) {
-  .modal-page-glow {
-    width: calc(100% - 1rem) !important;
-  }
 }
 
 /* ===== 弹窗 wrapper（默认隐藏，居中） ===== */
-.apply-modal-wrapper {
-  display: none;
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 999;
-  overflow-y: auto;
-  overflow-x: hidden;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-.apply-modal-wrapper.show {
-  display: flex;
-  flex-direction: column;
-  padding-top: 100px;
-  padding-bottom: 40px;
-  box-sizing: border-box;
-}
-.apply-modal-wrapper::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-  display: none;
-}
 
 .apply-modal-spacer-top,
 .apply-modal-spacer-bottom {
@@ -2160,12 +2093,8 @@ dialog.apply-modal {
 }
 
 @media (max-width: 520px) {
-  .apply-modal-wrapper.show {
-    padding-top: 80px;
-    padding-bottom: 24px;
-  }
+  
 }
-
 
 /* ===== footer（文字 + AGPL 图标） ===== */
 .footer {
@@ -2193,12 +2122,10 @@ dialog.apply-modal {
   opacity: 0.9;
 }
 
-
 /* brightness 提亮：暗紫变亮紫；白色已到上限，保持不变 */
     filter: brightness(2);
   }
 }
-
 
 /* ===== AGPL 图标 ===== */
 .footer-icon {
@@ -2214,6 +2141,300 @@ dialog.apply-modal {
 @media (prefers-color-scheme: dark) {
   .footer-icon {
     filter: brightness(2);
+  }
+}
+
+@media (max-width: 720px) {
+}
+
+/* 2. 顶部留白 60px（原 100px 太大） */
+
+/* 3. 默认禁止滚动，内容溢出时才允许 */
+
+@media (max-width: 720px) {
+  
+}
+
+/* 顶部留白 60px，底部 40px */
+
+/* 默认禁滚动，内容溢出时开滚动 */
+
+/* 中等屏幕自动收窄 */
+  }
+}
+
+/* 窄屏 */
+  }
+  
+}
+
+/* ============================================================
+ *  弹窗宽度（最终）
+ * ============================================================ */
+dialog.apply-modal {
+  
+  
+  min-width: 0 !important;
+}
+
+.modal-page-glow {
+  
+  
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+}
+
+@media (max-width: 720px) {
+}
+
+/* ============================================================
+ *  弹窗宽度（最终 v2）—— 与内容区一致 1000px
+ * ============================================================ */
+dialog.apply-modal {
+  
+  
+  min-width: 0 !important;
+}
+
+.modal-page-glow {
+  
+  
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+}
+
+@media (max-width: 720px) {
+}
+
+/* ============================================================
+ *  弹窗宽度（JS 动态设置，兜底 1000px）
+ * ============================================================ */
+dialog.apply-modal { width: 1340px;
+  max-width: calc(100vw - 4rem);
+}
+.modal-page-glow { width: 1340px;
+  max-width: calc(100vw - 4rem);
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+}
+
+@media (max-width: 720px) {
+  dialog.apply-modal,
+  .modal-page-glow {
+    width: calc(100vw - 2rem);
+    max-width: calc(100vw - 2rem);
+  }
+}
+
+/* ============================================================
+ *  弹窗宽度（兜底，JS 会动态覆盖）
+ * ============================================================ */
+dialog.apply-modal { width: 1340px;
+  max-width: calc(100vw - 4rem);
+  min-width: 0;
+}
+.modal-page-glow { width: 1340px;
+  max-width: calc(100vw - 4rem);
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
+}
+
+@media (max-width: 720px) {
+  dialog.apply-modal,
+  .modal-page-glow {
+    width: calc(100vw - 2rem);
+    max-width: calc(100vw - 2rem);
+  }
+}
+
+/* ============================================================
+ *  弹窗定位（实时宽度由 JS 控制）
+ * ============================================================ */
+
+dialog.apply-modal {
+  width: 940px;                       /* 兜底，JS 会覆盖 */
+  max-width: calc(100vw - 4rem);
+  margin: auto;                       /* 默认居中 */
+  flex-shrink: 0;
+}
+
+/* 溢出模式：顶部对齐，不用 auto margin */
+
+.modal-page-glow {
+  width: 940px;
+  max-width: calc(100vw - 4rem);
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+}
+
+@media (max-width: 720px) {
+  dialog.apply-modal,
+  .modal-page-glow {
+    max-width: calc(100vw - 2rem);
+  }
+}
+
+/* ============================================================
+ *  弹窗定位（干净版）
+ * ============================================================ */
+
+/* 内容溢出：顶部对齐 + padding-top 由 JS 动态设 */
+
+dialog.apply-modal {
+  margin: 0 auto;
+  flex-shrink: 0;
+  width: 940px;
+  max-width: calc(100vw - 4rem);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  padding: 0;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+  font-family: inherit;
+  overflow: hidden;
+}
+
+dialog.apply-modal:not([open]) {
+  display: none !important;
+}
+
+.modal-page-glow {
+  width: 940px;
+  max-width: calc(100vw - 4rem);
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+}
+
+@media (max-width: 720px) {
+  dialog.apply-modal,
+  .modal-page-glow {
+    max-width: calc(100vw - 2rem);
+  }
+}
+
+/* ============================================================
+ *  弹窗 wrapper（干净版）
+ * ============================================================ */
+
+/* 打开状态：默认居中，无 padding */
+
+/* 内容溢出：顶部留白 50px + 底部 40px，从上往下排 */
+
+dialog.apply-modal {
+  margin: 0 auto;
+  flex-shrink: 0;
+  width: 940px;
+  max-width: calc(100vw - 4rem);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  padding: 0;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+  font-family: inherit;
+  overflow: hidden;
+}
+
+dialog.apply-modal:not([open]) {
+  display: none !important;
+}
+
+.modal-page-glow {
+  width: 940px;
+  max-width: calc(100vw - 4rem);
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+}
+
+@media (max-width: 720px) {
+  dialog.apply-modal,
+  .modal-page-glow {
+    max-width: calc(100vw - 2rem);
+  }
+  
+}
+
+/* ============================================================
+ *  弹窗 wrapper（最终）
+ * ============================================================ */
+.apply-modal-wrapper {
+  display: none;
+  position: fixed;
+  top: 0;                    /* JS 会动态设为顶栏底部 */
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.apply-modal-wrapper::-webkit-scrollbar {
+  width: 0; height: 0; display: none;
+}
+
+/* 打开状态：默认居中 */
+.apply-modal-wrapper.show {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 溢出：顶底各 50px，从顶往下排 */
+.apply-modal-wrapper.show.overflowing {
+  justify-content: flex-start;
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+dialog.apply-modal {
+  margin: 0 auto;
+  flex-shrink: 0;
+  width: 940px;
+  max-width: calc(100vw - 4rem);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  padding: 0;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+  font-family: inherit;
+  overflow: hidden;
+}
+
+dialog.apply-modal:not([open]) {
+  display: none !important;
+}
+
+.modal-page-glow {
+  width: 940px;
+  max-width: calc(100vw - 4rem);
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+}
+
+@media (max-width: 720px) {
+  dialog.apply-modal,
+  .modal-page-glow {
+    max-width: calc(100vw - 2rem);
+  }
+  .apply-modal-wrapper.show.overflowing {
+    padding-top: 30px;
+    padding-bottom: 30px;
   }
 }
 

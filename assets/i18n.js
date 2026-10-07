@@ -848,32 +848,60 @@ function initApplyModal() {
     }
   };
 
+  // ========== 核心：实时计算宽度 + 定位 ==========
+  const updateLayout = () => {
+    const topbarInner = document.querySelector('.topbar-inner');
+    if (!topbarInner) return;
+
+    const rect = topbarInner.getBoundingClientRect();
+    // 直线段宽度 = 胶囊宽 - 胶囊高（左右各扣一个半圆半径）
+    const straightW = Math.round(rect.width - rect.height);
+    // 顶栏底部 Y 坐标
+    const topbarBottom = Math.round(rect.bottom);
+
+    // wrapper 从顶栏底部开始
+    wrapper.style.setProperty('top', topbarBottom + 'px', 'important');
+
+    // 应用宽度
+    modal.style.setProperty('width', straightW + 'px', 'important');
+    modal.style.setProperty('max-width', straightW + 'px', 'important');
+    if (glowTop) glowTop.style.setProperty('width', straightW + 'px', 'important');
+    if (glowBottom) glowBottom.style.setProperty('width', straightW + 'px', 'important');
+
+    // 溢出判断：wrapper 高度（顶栏底到视口底）
+    const wrapperH = window.innerHeight - topbarBottom;
+    const modalH = modal.offsetHeight;
+    const topPad = 50;
+    const bottomPad = 50;
+
+    const needScroll = (modalH + topPad + bottomPad) > wrapperH;
+
+    // 只切 class，padding 由 CSS 控制
+    wrapper.classList.toggle('overflowing', needScroll);
+
+    return { needScroll, topbarBottom };
+  };
+
+  // 更新辉光位置
   const updateGlowTopPos = () => {
     if (!glowTop) return;
-
-    // 顶栏是否收缩（只看页面滚动位置）
-    const topbarCollapsed = window.scrollY > 20;
-
-    if (topbarCollapsed) {
-      // 顶栏已收缩为胶囊 → 辉光和 wrapper 都贴顶栏底部
-      const topbarInner = document.querySelector('.topbar-inner');
-      if (topbarInner) {
-        const bottom = Math.round(topbarInner.getBoundingClientRect().bottom);
-        glowTop.style.setProperty('top', bottom + 'px', 'important');
-        wrapper.style.setProperty('top', bottom + 'px', 'important');
-      }
-    } else {
-      // 顶栏透明宽条 → 辉光贴屏幕顶部，wrapper 也从屏幕顶开始
-      glowTop.style.setProperty('top', '0px', 'important');
-      wrapper.style.setProperty('top', '0px', 'important');
+    const topbarInner = document.querySelector('.topbar-inner');
+    if (topbarInner) {
+      const bottom = Math.round(topbarInner.getBoundingClientRect().bottom);
+      glowTop.style.setProperty('top', bottom + 'px', 'important');
+      
     }
   };
 
   let isAnimating = false;
+  let closing = false;
+  let resizeObserver = null;
 
   const updateGlow = () => {
-    if (isAnimating) return;
+    if (isAnimating || closing) return;
     if (!glowTop || !glowBottom) return;
+
+    updateGlowTopPos();
 
     const st = wrapper.scrollTop;
     const ch = wrapper.clientHeight;
@@ -887,16 +915,9 @@ function initApplyModal() {
     glowBottom.classList.toggle('show', showBottom);
   };
 
-  let closing = false;
-
   const open = () => {
     if (closing) return;
     refreshTexts();
-    updateGlowTopPos();
-
-    // 先显示 wrapper
-    wrapper.classList.add('show');
-    wrapper.scrollTop = 0;
 
     // 重置动画
     modal.classList.remove('closing');
@@ -904,29 +925,59 @@ function initApplyModal() {
     void modal.offsetWidth;
     modal.classList.add('opening');
 
-    
-    // 动画期间禁用辉光
-    isAnimating = true;
-    if (glowTop) glowTop.classList.remove('show');
-    if (glowBottom) glowBottom.classList.remove('show');
-
-    document.body.classList.add('modal-open');
-
-    if (mask) {
-      mask.classList.remove('show');
-      void mask.offsetWidth;
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          mask.classList.add('show');
-        });
-      });
-    }
-
-    wrapper.scrollTop = 0;    setTimeout(() => {
-      modal.classList.remove('opening');
-      isAnimating = false;
-      requestAnimationFrame(updateGlow);
+    // 让 wrapper 可见
+    wrapper.classList.add('show');
+    wrapper.scrollTop = 0;
+
+    // 先算一次布局
+    updateGlowTopPos();
+    updateLayout();
+
+    // 动画期间禁用辉光
+    isAnimating = true;
+    if (glowTop) glowTop.classList.remove('show');
+    if (glowBottom) glowBottom.classList.remove('show');
+
+    document.body.classList.add('modal-open');
+
+    if (mask) {
+      mask.classList.remove('show');
+      void mask.offsetWidth;
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          mask.classList.add('show');
+        });
+      });
+    }
+
+    // 显示 dialog
+    if (typeof modal.show === 'function') {
+      modal.show();
+    } else {
+      modal.setAttribute('open', '');
+    }
+
+    // 动画结束后再算一次（此时尺寸稳定）
+    setTimeout(() => {
+      modal.classList.remove('opening');
+      isAnimating = false;
+      updateLayout();
+      requestAnimationFrame(updateGlow);
     }, OPEN_MS);
+
+    // 实时监听顶栏尺寸变化（顶栏展开/收缩时更新弹窗宽度）
+    const topbarInner = document.querySelector('.topbar-inner');
+    if (topbarInner && 'ResizeObserver' in window) {
+      if (resizeObserver) resizeObserver.disconnect();
+      resizeObserver = new ResizeObserver(() => {
+        if (!closing) {
+          updateLayout();
+          updateGlowTopPos();
+          requestAnimationFrame(updateGlow);
+        }
+      });
+      resizeObserver.observe(topbarInner);
+    }
   };
 
   const close = () => {
@@ -944,7 +995,12 @@ function initApplyModal() {
     setTimeout(() => {
       modal.classList.remove('closing');
       wrapper.classList.remove('show');
+      wrapper.classList.remove('overflowing');
       wrapper.scrollTop = 0;
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+        resizeObserver = null;
+      }
       closing = false;
     }, CLOSE_MS);
   };
@@ -960,11 +1016,17 @@ function initApplyModal() {
 
   wrapper.addEventListener('scroll', updateGlow, { passive: true });
   window.addEventListener('resize', () => {
+    updateLayout();
     updateGlowTopPos();
     updateGlow();
   });
+  // 页面滚动时也更新（顶栏会展开/收缩）
   window.addEventListener('scroll', () => {
-    updateGlowTopPos();
+    if (wrapper.classList.contains('show') && !closing) {
+      updateLayout();
+      updateGlowTopPos();
+      requestAnimationFrame(updateGlow);
+    }
   }, { passive: true });
 
   openBtn.addEventListener('click', open);
@@ -992,6 +1054,13 @@ function initApplyModal() {
 }
 
 document.addEventListener('DOMContentLoaded', initApplyModal);
+
+
+
+
+
+
+
 
 
 
